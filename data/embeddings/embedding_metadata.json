@@ -1,0 +1,5 @@
+{
+    "model": "all-MiniLM-L6-v2",
+    "dimension": 384,
+    "records": 6555
+}

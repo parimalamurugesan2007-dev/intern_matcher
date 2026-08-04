@@ -1,0 +1,171 @@
+{
+    "Backend Development": [
+        "backend",
+        "java",
+        "spring",
+        "django",
+        "flask",
+        "node",
+        "express",
+        "api",
+        "python backend",
+        "golang",
+        "php",
+        "laravel"
+    ],
+
+    "Frontend Development": [
+        "frontend",
+        "react",
+        "angular",
+        "vue",
+        "html",
+        "css",
+        "javascript",
+        "typescript"
+    ],
+
+    "Full Stack Development": [
+        "full stack",
+        "mern",
+        "mean",
+        "fullstack"
+    ],
+
+    "Artificial Intelligence": [
+        "artificial intelligence",
+        "ai",
+        "llm",
+        "generative ai",
+        "gen ai"
+    ],
+
+    "Machine Learning": [
+        "machine learning",
+        "ml",
+        "deep learning",
+        "tensorflow",
+        "pytorch",
+        "scikit"
+    ],
+
+    "Data Science": [
+        "data science",
+        "data analyst",
+        "analytics",
+        "business intelligence"
+    ],
+
+    "Cloud Computing": [
+        "cloud",
+        "aws",
+        "azure",
+        "gcp"
+    ],
+
+    "Cyber Security": [
+        "cyber",
+        "security",
+        "penetration",
+        "ethical hacking"
+    ],
+
+    "DevOps": [
+        "devops",
+        "docker",
+        "kubernetes",
+        "jenkins",
+        "ci/cd"
+    ],
+
+    "Mobile Development": [
+        "android",
+        "ios",
+        "flutter",
+        "react native"
+    ],
+
+    "UI UX": [
+        "ui",
+        "ux",
+        "figma",
+        "product design"
+    ],
+
+    "Digital Marketing": [
+    "digital marketing",
+    "marketing",
+    "seo",
+    "sem",
+    "email marketing",
+    "social media",
+    "content marketing"
+    ],
+
+    "Content Writing": [
+        "content",
+        "copywriting",
+        "writing"
+    ],
+
+    "Business Development": [
+    "business development",
+    "sales",
+    "market research",
+    "field sales"
+    ],
+
+    "Finance": [
+        "finance",
+        "account",
+        "accounting"
+    ],
+
+    "Human Resources": [
+    "human resource",
+    "hr",
+    "recruitment",
+    "talent acquisition",
+    "recruiter",
+    "recruitment consultant"
+    ],
+
+    "Graphic Design": [
+    "graphic",
+    "photoshop",
+    "illustrator",
+    "canva",
+    "fashion design"
+    ],
+
+    "Video Editing": [
+        "video",
+        "premiere",
+        "after effects"
+    ],
+
+    "QA Testing": [
+        "testing",
+        "qa",
+        "quality assurance"
+    ],
+    "Operations": [
+    "operations",
+    "operation"
+    ],
+
+    "Education": [
+        "teaching",
+        "teacher",
+        "tutor",
+        "education"
+    ],
+
+    "Customer Support": [
+        "telecalling",
+        "customer support",
+        "customer service",
+        "bpo",
+        "call center"
+    ]
+}
