@@ -32,16 +32,34 @@ class DomainPredictor:
 
     # -----------------------------------------------------
 
-    def predict(self, resume_text: str) -> str:
+    def predict(self, skill_text):
 
-        vector = self.vectorizer.transform(
-            [resume_text]
-        )
+        print("\n" + "="*60)
+        print("INPUT TO DOMAIN PREDICTOR")
+        print("="*60)
+        print(skill_text)
+
+        vector = self.vectorizer.transform([skill_text])
+
+        print("\nVector Shape :", vector.shape)
+        print("Non Zero Features :", vector.nnz)
 
         prediction = self.model.predict(vector)
 
-        domain = self.encoder.inverse_transform(
-            prediction
-        )[0]
+        probabilities = self.model.predict_proba(vector)[0]
+
+        top = probabilities.argsort()[-5:][::-1]
+
+        print("\nTop Predictions")
+
+        for i in top:
+            print(
+                f"{self.encoder.inverse_transform([i])[0]:30}"
+                f"{probabilities[i]:.3f}"
+            )
+
+        domain = self.encoder.inverse_transform(prediction)[0]
+
+        print("\nPredicted :", domain)
 
         return domain

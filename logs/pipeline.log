@@ -2100,3 +2100,158 @@
 2026-08-04 11:36:12,565 | INFO | Preferred Domain Received = Others
 2026-08-04 11:36:12,566 | INFO | ============================================================
 2026-08-04 11:36:13,144 | INFO | Top 10 Recommendations Generated
+2026-08-06 08:41:09,534 | INFO | ======================================================================
+2026-08-06 08:41:09,535 | INFO | Loading Recommendation Engine
+2026-08-06 08:41:09,536 | INFO | ======================================================================
+2026-08-06 08:41:09,708 | INFO | Dataset Loaded : 6805 internships
+2026-08-06 08:41:09,709 | INFO | Embeddings Shape : (6805, 384)
+2026-08-06 08:41:37,523 | INFO | ======================================================================
+2026-08-06 08:41:37,524 | INFO | Generating Internship Recommendations
+2026-08-06 08:41:37,524 | INFO | ======================================================================
+2026-08-06 08:41:37,525 | INFO | ============================================================
+2026-08-06 08:41:37,525 | INFO | Loading Embedding Model
+2026-08-06 08:41:37,526 | INFO | ============================================================
+2026-08-06 08:41:37,536 | INFO | No device provided, using cpu
+2026-08-06 08:41:57,996 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 08:41:58,071 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-08-06 08:41:58,408 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 08:41:58,488 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-08-06 08:41:58,507 | INFO | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-08-06 08:41:58,813 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 08:41:58,890 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-08-06 08:41:59,122 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 08:41:59,123 | WARNING | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-08-06 08:41:59,196 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-08-06 08:41:59,608 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 08:41:59,630 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-08-06 08:42:00,016 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 08:42:00,039 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-08-06 08:42:00,346 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-08-06 08:42:00,631 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 08:42:00,645 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-08-06 08:42:01,451 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-08-06 08:42:01,687 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-06 08:42:01,995 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-06 08:42:02,283 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-06 08:42:02,579 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 08:42:02,601 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-06 08:42:02,916 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 08:42:03,010 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-08-06 08:42:03,316 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 08:42:03,395 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-08-06 08:42:03,633 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 08:42:03,712 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-06 08:42:04,040 | INFO | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-08-06 08:42:04,340 | INFO | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-08-06 08:42:04,750 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 08:42:04,828 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-08-06 08:42:05,136 | INFO | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-08-06 08:42:05,162 | INFO | Model Loaded : all-MiniLM-L6-v2
+2026-08-06 08:42:05,614 | INFO | ============================================================
+2026-08-06 08:42:05,614 | INFO | Preferred Domain Received = Artificial Intelligence
+2026-08-06 08:42:05,615 | INFO | ============================================================
+2026-08-06 08:42:05,668 | INFO | Top 10 Recommendations Generated
+2026-08-06 08:45:02,640 | INFO | ======================================================================
+2026-08-06 08:45:02,640 | INFO | Generating Internship Recommendations
+2026-08-06 08:45:02,641 | INFO | ======================================================================
+2026-08-06 08:45:02,819 | INFO | ============================================================
+2026-08-06 08:45:02,819 | INFO | Preferred Domain Received = Others
+2026-08-06 08:45:02,819 | INFO | ============================================================
+2026-08-06 08:45:03,073 | INFO | Top 10 Recommendations Generated
+2026-08-06 09:09:07,648 | INFO | ======================================================================
+2026-08-06 09:09:07,650 | INFO | Loading Recommendation Engine
+2026-08-06 09:09:07,650 | INFO | ======================================================================
+2026-08-06 09:09:07,892 | INFO | Dataset Loaded : 6805 internships
+2026-08-06 09:09:07,895 | INFO | Embeddings Shape : (6805, 384)
+2026-08-06 09:09:31,249 | INFO | ======================================================================
+2026-08-06 09:09:31,250 | INFO | Loading Recommendation Engine
+2026-08-06 09:09:31,250 | INFO | ======================================================================
+2026-08-06 09:09:31,364 | INFO | Dataset Loaded : 6805 internships
+2026-08-06 09:09:31,365 | INFO | Embeddings Shape : (6805, 384)
+2026-08-06 09:09:55,032 | INFO | ======================================================================
+2026-08-06 09:09:55,032 | INFO | Loading Recommendation Engine
+2026-08-06 09:09:55,032 | INFO | ======================================================================
+2026-08-06 09:09:55,117 | INFO | Dataset Loaded : 6805 internships
+2026-08-06 09:09:55,117 | INFO | Embeddings Shape : (6805, 384)
+2026-08-06 09:10:19,947 | INFO | ======================================================================
+2026-08-06 09:10:19,948 | INFO | Loading Recommendation Engine
+2026-08-06 09:10:19,949 | INFO | ======================================================================
+2026-08-06 09:10:20,055 | INFO | Dataset Loaded : 6805 internships
+2026-08-06 09:10:20,055 | INFO | Embeddings Shape : (6805, 384)
+2026-08-06 09:11:34,185 | INFO | ======================================================================
+2026-08-06 09:11:34,186 | INFO | Loading Recommendation Engine
+2026-08-06 09:11:34,187 | INFO | ======================================================================
+2026-08-06 09:11:34,423 | INFO | Dataset Loaded : 6805 internships
+2026-08-06 09:11:34,424 | INFO | Embeddings Shape : (6805, 384)
+2026-08-06 09:26:55,111 | INFO | ======================================================================
+2026-08-06 09:26:55,112 | INFO | Loading Recommendation Engine
+2026-08-06 09:26:55,112 | INFO | ======================================================================
+2026-08-06 09:26:55,235 | INFO | Dataset Loaded : 6805 internships
+2026-08-06 09:26:55,235 | INFO | Embeddings Shape : (6805, 384)
+2026-08-06 09:27:43,479 | INFO | ======================================================================
+2026-08-06 09:27:43,479 | INFO | Loading Recommendation Engine
+2026-08-06 09:27:43,479 | INFO | ======================================================================
+2026-08-06 09:27:43,649 | INFO | Dataset Loaded : 6805 internships
+2026-08-06 09:27:43,649 | INFO | Embeddings Shape : (6805, 384)
+2026-08-06 09:28:26,220 | INFO | ======================================================================
+2026-08-06 09:28:26,221 | INFO | Loading Recommendation Engine
+2026-08-06 09:28:26,222 | INFO | ======================================================================
+2026-08-06 09:28:26,360 | INFO | Dataset Loaded : 6805 internships
+2026-08-06 09:28:26,361 | INFO | Embeddings Shape : (6805, 384)
+2026-08-06 09:32:07,975 | INFO | ======================================================================
+2026-08-06 09:32:07,976 | INFO | Loading Recommendation Engine
+2026-08-06 09:32:07,976 | INFO | ======================================================================
+2026-08-06 09:32:08,119 | INFO | Dataset Loaded : 6805 internships
+2026-08-06 09:32:08,122 | INFO | Embeddings Shape : (6805, 384)
+2026-08-06 20:17:50,740 | INFO | ======================================================================
+2026-08-06 20:17:50,742 | INFO | Loading Recommendation Engine
+2026-08-06 20:17:50,742 | INFO | ======================================================================
+2026-08-06 20:17:50,922 | INFO | Dataset Loaded : 6805 internships
+2026-08-06 20:17:50,923 | INFO | Embeddings Shape : (6805, 384)
+2026-08-06 20:19:07,332 | INFO | ======================================================================
+2026-08-06 20:19:07,333 | INFO | Generating Internship Recommendations
+2026-08-06 20:19:07,333 | INFO | ======================================================================
+2026-08-06 20:19:07,334 | INFO | ============================================================
+2026-08-06 20:19:07,334 | INFO | Loading Embedding Model
+2026-08-06 20:19:07,335 | INFO | ============================================================
+2026-08-06 20:19:07,347 | INFO | No device provided, using cpu
+2026-08-06 20:19:09,121 | INFO | HTTP Request: GET https://huggingface.co/api/agent-harnesses "HTTP/1.1 200 OK"
+2026-08-06 20:19:09,388 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 20:19:09,389 | WARNING | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-08-06 20:19:09,431 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-08-06 20:19:09,680 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 20:19:09,705 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-08-06 20:19:09,707 | INFO | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-08-06 20:19:09,957 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 20:19:09,982 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-08-06 20:19:10,249 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 20:19:10,314 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-08-06 20:19:10,593 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 20:19:10,617 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-08-06 20:19:10,857 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 20:19:10,890 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-08-06 20:19:11,152 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-08-06 20:19:11,522 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 20:19:11,628 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-08-06 20:19:31,593 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-08-06 20:19:32,127 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-06 20:19:33,074 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-06 20:19:33,714 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-06 20:19:34,775 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 20:19:35,410 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-06 20:19:36,238 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 20:19:36,941 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-08-06 20:19:40,880 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 20:19:41,892 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-08-06 20:19:42,774 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 20:19:42,944 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-06 20:19:43,446 | INFO | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-08-06 20:19:43,770 | INFO | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-08-06 20:19:44,432 | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-06 20:19:44,565 | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-08-06 20:19:45,144 | INFO | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-08-06 20:19:45,177 | INFO | Model Loaded : all-MiniLM-L6-v2
+2026-08-06 20:19:45,661 | INFO | ============================================================
+2026-08-06 20:19:45,661 | INFO | Preferred Domain Received = Full Stack Development
+2026-08-06 20:19:45,662 | INFO | ============================================================
+2026-08-06 20:19:45,698 | INFO | Top 10 Recommendations Generated

@@ -57,8 +57,9 @@ async def recommend_resume(file: UploadFile = File(...)):
         resume_text = parser.parse()
 
         profile = extractor.extract_profile(resume_text)
+        skill_text = " ".join(profile["skills"])
 
-        domain = predictor.predict(resume_text)
+        domain = predictor.predict(skill_text)
         profile["preferred_domain"] = domain
 
         recommendations = engine.recommend(
