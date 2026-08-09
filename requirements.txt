@@ -27,4 +27,9 @@ tqdm
 
 rapidfuzz
 
+xgboost
+mlflow
+dvc
+
 pytest
+httpx

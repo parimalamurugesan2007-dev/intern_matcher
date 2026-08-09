@@ -22,6 +22,41 @@ class StudentProfileBuilder:
 
     # ---------------------------------------------------------
 
+    @staticmethod
+    def _project_to_text(project: object) -> str:
+        """Flatten a single project entry into plain text.
+
+        ``ProfileExtractor.extract_projects`` returns each project as a
+        dict (title / technologies / description); older callers may
+        still pass plain strings, so both shapes are supported here.
+        """
+
+        if isinstance(project, str):
+            return project
+
+        if isinstance(project, dict):
+            fragments: list[str] = []
+
+            title = project.get("title")
+            if title:
+                fragments.append(str(title))
+
+            technologies = project.get("technologies")
+            if technologies:
+                fragments.append(" ".join(str(t) for t in technologies))
+
+            description = project.get("description")
+            if isinstance(description, list):
+                fragments.append(" ".join(str(d) for d in description))
+            elif description:
+                fragments.append(str(description))
+
+            return " ".join(fragments)
+
+        return str(project)
+
+    # ---------------------------------------------------------
+
     def build(self, profile: dict) -> str:
 
         parts = []
@@ -47,7 +82,7 @@ class StudentProfileBuilder:
             parts.append("Projects")
 
             parts.append(
-                " ".join(projects)
+                " ".join(self._project_to_text(project) for project in projects)
             )
 
         # --------------------------

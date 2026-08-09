@@ -2376,3 +2376,75 @@
 2026-08-08 22:18:11,404 | INFO | AIInternshipPlatform | ======================================================================
 2026-08-08 22:18:11,582 | INFO | AIInternshipPlatform | Preferred domain filter applied: Full Stack Development (73 rows)
 2026-08-08 22:18:11,609 | INFO | AIInternshipPlatform | Top 10 recommendations generated
+2026-08-09 10:06:59,287 | INFO | AIInternshipPlatform | ======================================================================
+2026-08-09 10:06:59,288 | INFO | AIInternshipPlatform | Application Startup: Loading ML Artifacts
+2026-08-09 10:06:59,289 | INFO | AIInternshipPlatform | ======================================================================
+2026-08-09 10:06:59,290 | INFO | AIInternshipPlatform | Skill dictionary loaded : 409 entries
+2026-08-09 10:06:59,291 | INFO | AIInternshipPlatform | Profile extractor ready
+2026-08-09 10:06:59,777 | INFO | AIInternshipPlatform | ============================================================
+2026-08-09 10:06:59,778 | INFO | AIInternshipPlatform | Domain Predictor Model Loaded
+2026-08-09 10:06:59,779 | INFO | AIInternshipPlatform | ============================================================
+2026-08-09 10:06:59,779 | INFO | AIInternshipPlatform | Domain predictor ready
+2026-08-09 10:06:59,780 | INFO | AIInternshipPlatform | ======================================================================
+2026-08-09 10:06:59,780 | INFO | AIInternshipPlatform | Loading Recommendation Engine
+2026-08-09 10:06:59,781 | INFO | AIInternshipPlatform | ======================================================================
+2026-08-09 10:06:59,981 | INFO | AIInternshipPlatform | Dataset loaded : 6805 internships
+2026-08-09 10:06:59,981 | INFO | AIInternshipPlatform | Embeddings shape : (6805, 384)
+2026-08-09 10:06:59,982 | INFO | AIInternshipPlatform | Recommendation engine ready
+2026-08-09 10:06:59,982 | INFO | AIInternshipPlatform | Startup complete
+2026-08-09 10:07:38,143 | INFO | AIInternshipPlatform | Extracted 24 unique skills from resume
+2026-08-09 10:07:38,280 | INFO | AIInternshipPlatform | Top-5 domains: [{'domain': 'Full Stack Development', 'confidence': 0.8513}, {'domain': 'Others', 'confidence': 0.0938}, {'domain': 'Backend Development', 'confidence': 0.0212}, {'domain': 'Content Writing', 'confidence': 0.0097}, {'domain': 'Operations', 'confidence': 0.0051}]
+2026-08-09 10:07:38,281 | INFO | AIInternshipPlatform | ======================================================================
+2026-08-09 10:07:38,282 | INFO | AIInternshipPlatform | Generating Internship Recommendations
+2026-08-09 10:07:38,283 | INFO | AIInternshipPlatform | ======================================================================
+2026-08-09 10:07:38,283 | INFO | AIInternshipPlatform | ============================================================
+2026-08-09 10:07:38,283 | INFO | AIInternshipPlatform | Loading Embedding Model
+2026-08-09 10:07:38,284 | INFO | AIInternshipPlatform | ============================================================
+2026-08-09 10:07:38,300 | INFO | sentence_transformers.base.model | No device provided, using cpu
+2026-08-09 10:07:39,001 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-09 10:07:39,003 | WARNING | huggingface_hub.utils._http | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-08-09 10:07:39,018 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-08-09 10:07:39,341 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-09 10:07:39,419 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-08-09 10:07:39,423 | INFO | sentence_transformers.base.model | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-08-09 10:07:39,718 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-09 10:07:39,730 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-08-09 10:07:40,024 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-08-09 10:07:40,037 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-08-09 10:07:40,344 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-09 10:07:40,363 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-08-09 10:07:40,665 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-09 10:07:40,747 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-08-09 10:07:41,049 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-08-09 10:07:41,380 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-09 10:07:41,457 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-08-09 10:07:42,196 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-08-09 10:07:42,503 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-09 10:07:42,797 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-09 10:07:43,104 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-09 10:07:43,407 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-09 10:07:43,424 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-09 10:07:43,740 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-09 10:07:43,825 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-08-09 10:07:44,227 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-09 10:07:44,436 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-08-09 10:07:44,666 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-09 10:07:44,742 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-09 10:07:45,068 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-08-09 10:07:45,353 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-08-09 10:07:45,776 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-09 10:07:45,881 | INFO | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-08-09 10:07:46,169 | INFO | httpx | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-08-09 10:07:46,206 | INFO | AIInternshipPlatform | Model Loaded : all-MiniLM-L6-v2
+2026-08-09 10:07:46,720 | INFO | AIInternshipPlatform | Preferred domain filter applied: Full Stack Development (73 rows)
+2026-08-09 10:07:46,764 | INFO | AIInternshipPlatform | Top 10 recommendations generated
+2026-08-09 10:10:01,805 | INFO | AIInternshipPlatform | Domain-specific recommendation requested: Ai
+2026-08-09 10:10:01,813 | INFO | AIInternshipPlatform | No internships found for domain: Ai
+2026-08-09 10:10:16,992 | INFO | AIInternshipPlatform | Domain-specific recommendation requested: AI
+2026-08-09 10:10:16,996 | INFO | AIInternshipPlatform | No internships found for domain: AI
+2026-08-09 10:10:28,907 | INFO | AIInternshipPlatform | Domain-specific recommendation requested: FULL Stack
+2026-08-09 10:10:28,912 | INFO | AIInternshipPlatform | No internships found for domain: FULL Stack
+2026-08-09 10:11:04,722 | INFO | AIInternshipPlatform | Domain-specific recommendation requested: FULL Stack
+2026-08-09 10:11:04,726 | INFO | AIInternshipPlatform | No internships found for domain: FULL Stack
+2026-08-09 10:11:14,919 | INFO | AIInternshipPlatform | Domain-specific recommendation requested: AI Internship
+2026-08-09 10:11:14,924 | INFO | AIInternshipPlatform | No internships found for domain: AI Internship

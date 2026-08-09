@@ -11,9 +11,7 @@ def test_skill_gap():
 
     resume_text = parser.parse()
 
-    extractor = ProfileExtractor(
-        "data/final/training_dataset_domain.csv"
-    )
+    extractor = ProfileExtractor()
 
     profile = extractor.extract_profile(
         resume_text

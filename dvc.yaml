@@ -1,0 +1,58 @@
+stages:
+  preprocessing:
+    cmd: python -m src.preprocessing.pipeline
+    deps:
+      - data/raw/internships.csv
+      - src/preprocessing/pipeline.py
+      - src/preprocessing/data_cleaner.py
+      - src/preprocessing/dataset_transformer.py
+      - src/preprocessing/role_normalizer.py
+      - src/preprocessing/skill_normalizer.py
+      - src/preprocessing/feature_engineering.py
+    outs:
+      - data/processed/internships_processed.csv
+
+  build_domain_dataset:
+    cmd: python -m src.preprocessing.build_domain_dataset
+    deps:
+      - data/processed/internships_processed.csv
+      - src/preprocessing/build_domain_dataset.py
+      - src/preprocessing/domain_mapper.py
+      - src/preprocessing/domain_mapping.json
+    outs:
+      - data/final/training_dataset_domain.csv
+
+  data_validation:
+    cmd: python -c "import pandas as pd; from src.training.data_validator import TrainingDataValidator; TrainingDataValidator(pd.read_csv('data/final/training_dataset_domain.csv')).run(strict=True)"
+    deps:
+      - data/final/training_dataset_domain.csv
+      - src/training/data_validator.py
+
+  training:
+    cmd: python -m src.training.train_domain_classifier
+    deps:
+      - data/final/training_dataset_domain.csv
+      - src/training/train_domain_classifier.py
+      - src/training/model_trainer.py
+      - src/training/model_selector.py
+      - src/training/data_validator.py
+      - src/mlops/mlflow_logger.py
+    outs:
+      - src/models/saved/best_model.pkl
+      - src/models/saved/vectorizer.pkl
+      - src/models/saved/label_encoder.pkl
+    metrics:
+      - src/models/saved/model_metrics.csv:
+          cache: false
+      - src/models/saved/model_metadata.json:
+          cache: false
+
+  build_embeddings:
+    cmd: python -m src.recommender.build_embeddings
+    deps:
+      - data/final/training_dataset_domain.csv
+      - src/recommender/build_embeddings.py
+      - src/models/embedding_model.py
+    outs:
+      - src/models/saved/internship_embeddings.npy
+      - data/embeddings/internship_index.csv

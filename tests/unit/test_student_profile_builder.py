@@ -11,9 +11,7 @@ def test_student_profile_builder():
 
     resume_text = parser.parse()
 
-    extractor = ProfileExtractor(
-        "data/final/training_dataset_domain.csv"
-    )
+    extractor = ProfileExtractor()
 
     profile = extractor.extract_profile(
         resume_text

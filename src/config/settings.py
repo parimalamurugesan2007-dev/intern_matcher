@@ -59,5 +59,45 @@ class Settings:
         "http://127.0.0.1:3000",
     ]
 
+    # ------------------------------------------------------------------
+    # MLflow
+    # ------------------------------------------------------------------
+    MLFLOW_TRACKING_URI: str = "sqlite:///mlflow.db"
+    MLFLOW_EXPERIMENT_NAME: str = "Internship Intelligence Platform"
 
-settings = Settings()
+    # ------------------------------------------------------------------
+    # Model metadata
+    # ------------------------------------------------------------------
+    MODEL_METADATA_PATH: str = "src/models/saved/model_metadata.json"
+
+    # ------------------------------------------------------------------
+    # Search
+    # ------------------------------------------------------------------
+    DEFAULT_SEARCH_LIMIT: int = 50
+    DEFAULT_DOMAIN_RESULTS: int = 10
+    DEFAULT_RECOMMEND_TOP_K: int = 10
+
+
+def _load_env_overrides(cfg: "Settings") -> "Settings":
+    """Allow key paths/settings to be overridden via environment variables."""
+
+    import os
+
+    env_map = {
+        "DATASET_PATH": "DATASET_PATH",
+        "EMBEDDING_PATH": "EMBEDDING_PATH",
+        "EMBEDDING_INDEX_PATH": "EMBEDDING_INDEX_PATH",
+        "MODEL_DIR": "MODEL_DIR",
+        "MLFLOW_TRACKING_URI": "MLFLOW_TRACKING_URI",
+        "MLFLOW_EXPERIMENT_NAME": "MLFLOW_EXPERIMENT_NAME",
+    }
+
+    for attr, env_var in env_map.items():
+        value = os.environ.get(f"INTERN_MATCHER_{env_var}")
+        if value:
+            setattr(cfg, attr, value)
+
+    return cfg
+
+
+settings = _load_env_overrides(Settings())
