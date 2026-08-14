@@ -1,0 +1,147 @@
+schema: '2.0'
+stages:
+  preprocessing:
+    cmd: python -m src.preprocessing.pipeline
+    deps:
+    - path: data/raw/internships.csv
+      hash: md5
+      md5: 269923d246dce3055f13b39cf18d96cd
+      size: 2944846
+    - path: src/preprocessing/data_cleaner.py
+      hash: md5
+      md5: 250112736291921efc0db79f04f0b665
+      size: 3715
+    - path: src/preprocessing/dataset_transformer.py
+      hash: md5
+      md5: 38e158ad5fe443790d789b90a39d7492
+      size: 4567
+    - path: src/preprocessing/feature_engineering.py
+      hash: md5
+      md5: eac2c05681d0d66d4130bd76d7c38933
+      size: 2844
+    - path: src/preprocessing/pipeline.py
+      hash: md5
+      md5: 7c8ce30e303d19f0af66b97dcf4100b2
+      size: 1717
+    - path: src/preprocessing/role_normalizer.py
+      hash: md5
+      md5: 55506c59694d8a9da3e957e0d61671a5
+      size: 1563
+    - path: src/preprocessing/skill_normalizer.py
+      hash: md5
+      md5: 10aec9661eecb640010aeca8b2b20ad2
+      size: 2125
+    outs:
+    - path: data/processed/internships_processed.csv
+      hash: md5
+      md5: b231d6f05069778694e2ecaae9626293
+      size: 6387793
+  build_domain_dataset:
+    cmd: python -m src.preprocessing.build_domain_dataset
+    deps:
+    - path: data/processed/internships_processed.csv
+      hash: md5
+      md5: b231d6f05069778694e2ecaae9626293
+      size: 6387793
+    - path: src/preprocessing/build_domain_dataset.py
+      hash: md5
+      md5: 135ea383d2371d9db611b1fca144c81d
+      size: 2463
+    - path: src/preprocessing/domain_mapper.py
+      hash: md5
+      md5: 901cb1686137706ae87f5f7b82bd986b
+      size: 646
+    - path: src/preprocessing/domain_mapping.json
+      hash: md5
+      md5: 403bba98bb723f4fac46175a0e9ec047
+      size: 2754
+    outs:
+    - path: data/final/training_dataset_domain.csv
+      hash: md5
+      md5: 2551a4cf64017a27c23a579853449401
+      size: 6367600
+  data_validation:
+    cmd: python -c "import pandas as pd; from src.training.data_validator import
+      TrainingDataValidator; 
+      TrainingDataValidator(pd.read_csv('data/final/training_dataset_domain.csv')).run(strict=True)"
+    deps:
+    - path: data/final/training_dataset_domain.csv
+      hash: md5
+      md5: 2551a4cf64017a27c23a579853449401
+      size: 6367600
+    - path: src/training/data_validator.py
+      hash: md5
+      md5: 4f3c87b030534c12f509dded0f091f65
+      size: 5890
+  training:
+    cmd: python -m src.training.train_domain_classifier
+    deps:
+    - path: data/final/training_dataset_domain.csv
+      hash: md5
+      md5: 2551a4cf64017a27c23a579853449401
+      size: 6367600
+    - path: src/mlops/mlflow_logger.py
+      hash: md5
+      md5: b262d8e452b2f3d4d567105a94ec4205
+      size: 4579
+    - path: src/training/data_validator.py
+      hash: md5
+      md5: 4f3c87b030534c12f509dded0f091f65
+      size: 5890
+    - path: src/training/model_selector.py
+      hash: md5
+      md5: b4096331d9fc519a594524fe48443e86
+      size: 2081
+    - path: src/training/model_trainer.py
+      hash: md5
+      md5: 62060423794e82b355118789b2c3ed66
+      size: 1349
+    - path: src/training/train_domain_classifier.py
+      hash: md5
+      md5: e71cab16e93c07e6621414371d68aa84
+      size: 9217
+    outs:
+    - path: src/models/saved/best_model.pkl
+      hash: md5
+      md5: 8263d7db469ee541df847bd75bad0219
+      size: 498407
+    - path: src/models/saved/label_encoder.pkl
+      hash: md5
+      md5: a53dc576dd8e270707f3a51b69fbf8a8
+      size: 847
+    - path: src/models/saved/model_metadata.json
+      hash: md5
+      md5: 33f426366256255786a45a8630a65d32
+      size: 979
+    - path: src/models/saved/model_metrics.csv
+      hash: md5
+      md5: fb52cb87414195cda71ef6018d5b3485
+      size: 306
+    - path: src/models/saved/vectorizer.pkl
+      hash: md5
+      md5: 8456a48819221a94f17174ef00428071
+      size: 123199
+  build_embeddings:
+    cmd: python -m src.recommender.build_embeddings
+    deps:
+    - path: data/final/training_dataset_domain.csv
+      hash: md5
+      md5: 2551a4cf64017a27c23a579853449401
+      size: 6367600
+    - path: src/models/embedding_model.py
+      hash: md5
+      md5: 2074abc7c5d0e846e464854164c39907
+      size: 1827
+    - path: src/recommender/build_embeddings.py
+      hash: md5
+      md5: ab7462957d634d51b05e6de4a405ce8b
+      size: 1900
+    outs:
+    - path: data/embeddings/internship_embeddings.npy
+      hash: md5
+      md5: 9effdd21d3a6662876055da0946684af
+      size: 10068608
+    - path: data/embeddings/internship_index.csv
+      hash: md5
+      md5: 739ab8a19f0f93f4de982f5d06a0ded6
+      size: 38227
