@@ -54,5 +54,5 @@ stages:
       - src/recommender/build_embeddings.py
       - src/models/embedding_model.py
     outs:
-      - src/models/saved/internship_embeddings.npy
+      - data/embeddings/internship_embeddings.npy
       - data/embeddings/internship_index.csv

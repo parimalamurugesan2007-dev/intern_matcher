@@ -17,6 +17,7 @@ import {
   Moon,
   Sun,
   Upload,
+  Compass,
 } from 'lucide-react';
 import { Logo } from '@/components/shared';
 import { useTheme } from '@/components/shared';
@@ -28,6 +29,7 @@ const navItems = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
   { label: 'Resume Analysis', to: '/upload-resume', icon: FileText },
   { label: 'Recommendations', to: '/recommendations', icon: Sparkles },
+  { label: 'Browse', to: '/browse', icon: Compass },
   { label: 'Skill Gap', to: '/skill-gap', icon: GitCompareArrows },
   { label: 'Learning Roadmap', to: '/learning-roadmap', icon: Map },
   { label: 'Applications', to: '/recommendations', icon: Send },

@@ -35,3 +35,7 @@ env/
 # OS
 .DS_Store
 Thumbs.db
+data/processed/internships_processed.csv
+
+data/embeddings/internship_embeddings.npy
+data/embeddings/internship_index.csv

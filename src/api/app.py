@@ -7,8 +7,9 @@ Endpoints
 ---------
 GET  /                          Basic liveness message
 GET  /health                    Health check + ML artifact availability
+POST /resume/upload             Resume upload -> extracted skills + top-5 domains (no recommendations)
 POST /recommend                 Resume upload -> profile + top-5 domains + recommendations
-GET  /recommend/domain/{domain} Internships belonging to one domain
+GET  /recommend/domain/{domain} Internships belonging to one domain (domain name is normalized)
 GET  /internships/search        Manual multi-filter internship search
 
 Design notes
@@ -34,6 +35,7 @@ from fastapi import FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.config.settings import settings
+from src.domain.normalizer import normalize_domain
 from src.domain.predict import DomainPredictor
 from src.recommender.recommendation_engine import RecommendationEngine
 from src.resume.parser import ResumeParser
@@ -151,6 +153,71 @@ def _dataframe_to_records(df) -> list[dict[str, Any]]:
     return df.to_dict(orient="records")
 
 
+def _validate_resume_upload(file: UploadFile) -> str:
+    """Validate the uploaded file and return its lowercase suffix, or raise HTTPException."""
+
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="No file was uploaded.")
+
+    suffix = Path(file.filename).suffix.lower()
+    if suffix not in SUPPORTED_RESUME_EXTENSIONS:
+        raise HTTPException(
+            status_code=415,
+            detail=f"Unsupported file type '{suffix}'. Supported types: {sorted(SUPPORTED_RESUME_EXTENSIONS)}",
+        )
+    return suffix
+
+
+async def _parse_resume_and_extract_profile(file: UploadFile, suffix: str) -> tuple[str, dict[str, Any]]:
+    """
+    Shared pipeline used by both /resume/upload and /recommend:
+
+        Resume (PDF/DOCX) -> ResumeParser -> full text
+                           -> ProfileExtractor -> profile (incl. final skill list)
+
+    Returns (resume_text, profile). Raises HTTPException on any failure.
+    The uploaded file's temp copy is always cleaned up before returning.
+    """
+
+    extractor = _require_extractor()
+
+    temp_path: Optional[str] = None
+    try:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temp:
+            shutil.copyfileobj(file.file, temp)
+            temp_path = temp.name
+
+        try:
+            parser = ResumeParser(temp_path)
+            resume_text = parser.parse()
+        except Exception as error:
+            logger.error(f"Resume parsing failed for '{file.filename}': {error}")
+            raise HTTPException(
+                status_code=422,
+                detail="Could not read the uploaded resume. Please upload a valid, non-corrupted PDF or DOCX file.",
+            )
+
+        if not resume_text or not resume_text.strip():
+            raise HTTPException(
+                status_code=422,
+                detail="The uploaded resume appears to be empty or unreadable.",
+            )
+
+        profile = extractor.extract_profile(resume_text)
+
+        if not profile.get("skills"):
+            raise HTTPException(
+                status_code=422,
+                detail="No recognizable skills were found in the resume. Add a Skills section or more detail to your Projects/Experience.",
+            )
+
+        return resume_text, profile
+
+    finally:
+        if temp_path:
+            Path(temp_path).unlink(missing_ok=True)
+
+
 # ---------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------
@@ -198,6 +265,35 @@ def health() -> dict[str, Any]:
     }
 
 
+@app.post("/resume/upload")
+async def upload_resume(
+    file: UploadFile = File(...),
+    top_domains: int = Query(default=settings.TOP_K_DOMAINS, ge=1, le=10),
+) -> dict[str, Any]:
+    """
+    Resume -> Resume Parser -> full text -> Skill Extraction -> Final Combined
+    Skills -> Domain Prediction -> Top-5 Domains.
+
+    This endpoint does NOT generate internship recommendations (that remains
+    the job of POST /recommend, preserved as-is for backward compatibility).
+    It exists so the frontend can show extracted skills + Top-5 domains
+    immediately after upload, before the user picks a domain to browse.
+    """
+
+    suffix = _validate_resume_upload(file)
+    predictor = _require_predictor()
+
+    resume_text, profile = await _parse_resume_and_extract_profile(file, suffix)
+
+    top_domain_results = predictor.predict_top_domains_from_skills(profile["skills"], top_k=top_domains)
+
+    return {
+        "filename": file.filename,
+        "extracted_skills": profile["skills"],
+        "predicted_domains": top_domain_results,
+    }
+
+
 @app.post("/recommend")
 async def recommend_resume(
     file: UploadFile = File(...),
@@ -206,55 +302,28 @@ async def recommend_resume(
 ) -> dict[str, Any]:
     """Upload a resume (PDF/DOCX) and receive predicted domains + ranked recommendations."""
 
-    if not file.filename:
-        raise HTTPException(status_code=400, detail="No file was uploaded.")
-
-    suffix = Path(file.filename).suffix.lower()
-    if suffix not in SUPPORTED_RESUME_EXTENSIONS:
-        raise HTTPException(
-            status_code=415,
-            detail=f"Unsupported file type '{suffix}'. Supported types: {sorted(SUPPORTED_RESUME_EXTENSIONS)}",
-        )
-
-    extractor = _require_extractor()
+    suffix = _validate_resume_upload(file)
     predictor = _require_predictor()
     engine = _require_engine()
 
-    temp_path: Optional[str] = None
+    resume_text, profile = await _parse_resume_and_extract_profile(file, suffix)
+
     try:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temp:
-            shutil.copyfileobj(file.file, temp)
-            temp_path = temp.name
-
-        try:
-            parser = ResumeParser(temp_path)
-            resume_text = parser.parse()
-        except Exception as error:
-            logger.error(f"Resume parsing failed for '{file.filename}': {error}")
-            raise HTTPException(
-                status_code=422,
-                detail="Could not read the uploaded resume. Please upload a valid, non-corrupted PDF or DOCX file.",
-            )
-
-        if not resume_text or not resume_text.strip():
-            raise HTTPException(
-                status_code=422,
-                detail="The uploaded resume appears to be empty or unreadable.",
-            )
-
-        profile = extractor.extract_profile(resume_text)
-
-        if not profile.get("skills"):
-            raise HTTPException(
-                status_code=422,
-                detail="No recognizable skills were found in the resume. Add a Skills section or more detail to your Projects/Experience.",
-            )
-
         skill_text = " ".join(profile["skills"])
 
         top_domain_results = predictor.predict_top_domains(skill_text, top_k=top_domains)
-        predicted_domain = top_domain_results[0]["domain"] if top_domain_results else "Others"
+
+# Skip "Others" — it is a catch-all label that gives generic results.
+# Use the first specific domain the model is confident about instead.
+# Example: if model returns Others=37%, Backend=15%, AI=8%
+# → use Backend Development for recommendations (far more useful).
+        SKIP_DOMAINS = {"Others"}
+        predicted_domain = next(
+            (d["domain"] for d in top_domain_results if d["domain"] not in SKIP_DOMAINS),
+            top_domain_results[0]["domain"] if top_domain_results else "Others",
+        )
         profile["preferred_domain"] = predicted_domain
+        logger.info(f"Using domain for recommendations: '{predicted_domain}' (skipped 'Others' if present)")
 
         try:
             recommendations_df = engine.recommend(
@@ -285,9 +354,6 @@ async def recommend_resume(
     except Exception as error:
         logger.error(f"Unexpected error while processing resume '{file.filename}': {error}")
         raise HTTPException(status_code=500, detail="An unexpected error occurred while processing the resume.")
-    finally:
-        if temp_path:
-            Path(temp_path).unlink(missing_ok=True)
 
 
 @app.get("/recommend/domain/{domain}")
@@ -295,11 +361,19 @@ def recommend_by_domain(
     domain: str,
     top_k: int = Query(default=settings.DEFAULT_DOMAIN_RESULTS, ge=1, le=100),
 ) -> dict[str, Any]:
-    """Return internships belonging to a specific domain (e.g. AI, Backend Development)."""
+    """
+    Return internships belonging to a specific domain.
+
+    The `domain` path parameter is normalized through the single canonical
+    normalizer (src.domain.normalizer.normalize_domain), so "ai", "AI/ML",
+    "Artificial Intelligence" and "artificial-intelligence" all resolve to
+    the same dataset rows.
+    """
 
     if not domain or not domain.strip():
         raise HTTPException(status_code=400, detail="Domain must not be empty.")
 
+    canonical_domain = normalize_domain(domain)
     engine = _require_engine()
 
     try:
@@ -311,11 +385,11 @@ def recommend_by_domain(
     if results_df.empty:
         raise HTTPException(
             status_code=404,
-            detail=f"No internships found for domain '{domain}'.",
+            detail=f"No internships found for domain '{domain}' (normalized to '{canonical_domain}').",
         )
 
     return {
-        "domain": domain,
+        "domain": canonical_domain,
         "count": len(results_df),
         "internships": _dataframe_to_records(results_df),
     }
@@ -327,15 +401,18 @@ def search_internships(
     domain: Optional[str] = Query(default=None),
     mode: Optional[str] = Query(default=None),
     duration: Optional[str] = Query(default=None),
-    stipend: Optional[str] = Query(default=None, description="Minimum/keyword stipend filter"),
+    stipend: Optional[str] = Query(default=None, description="Legacy free-text stipend filter"),
+    min_stipend: Optional[float] = Query(default=None, ge=0, description="Minimum stipend (numeric)"),
     company: Optional[str] = Query(default=None),
     skills: Optional[str] = Query(default=None, description="Comma-separated skill list"),
     keyword: Optional[str] = Query(default=None),
+    limit: Optional[int] = Query(default=None, ge=1, le=200, description="Alias for top_k"),
     top_k: int = Query(default=settings.DEFAULT_SEARCH_LIMIT, ge=1, le=200),
 ) -> dict[str, Any]:
-    """Manual internship search with combinable filters."""
+    """Manual internship search with combinable filters (AND logic)."""
 
     engine = _require_engine()
+    effective_top_k = limit if limit is not None else top_k
 
     try:
         results_df = engine.search_internships(
@@ -344,10 +421,11 @@ def search_internships(
             mode=mode,
             duration=duration,
             stipend=stipend,
+            min_stipend=min_stipend,
             company=company,
             skills=skills,
             keyword=keyword,
-            top_k=top_k,
+            top_k=effective_top_k,
         )
     except Exception as error:
         logger.error(f"Internship search failed: {error}")
@@ -356,10 +434,11 @@ def search_internships(
     return {
         "filters": {
             "location": location,
-            "domain": domain,
+            "domain": normalize_domain(domain) if domain else None,
             "mode": mode,
             "duration": duration,
             "stipend": stipend,
+            "min_stipend": min_stipend,
             "company": company,
             "skills": skills,
             "keyword": keyword,

@@ -27,7 +27,7 @@ Outputs (src/models/saved/)    : best_model.pkl, vectorizer.pkl, label_encoder.p
 """
 
 from __future__ import annotations
-
+from sklearn.utils import resample
 import hashlib
 import json
 import os
@@ -126,6 +126,23 @@ class DomainClassifierTrainer:
         df = df[df["Domain"].isin(valid_domains)].reset_index(drop=True)
 
         logger.info(f"Usable rows after cleaning: {len(df)}")
+        # Balance classes — cap majority domains and upsample minority ones
+        # so the model stops defaulting to "Others" for every resume.
+        max_samples_per_domain = 300
+        min_samples_per_domain = 30
+
+        balanced_parts = []
+        for domain in df["Domain"].unique():
+            domain_df = df[df["Domain"] == domain]
+            if len(domain_df) > max_samples_per_domain:
+                domain_df = domain_df.sample(n=max_samples_per_domain, random_state=42)
+            elif len(domain_df) < min_samples_per_domain and len(domain_df) >= 2:
+                domain_df = resample(domain_df, replace=True, n_samples=min_samples_per_domain, random_state=42)
+            balanced_parts.append(domain_df)
+
+        df = pd.concat(balanced_parts).sample(frac=1, random_state=42).reset_index(drop=True)
+        logger.info(f"Balanced dataset: {len(df)} rows | {df['Domain'].nunique()} domains")
+        logger.info(f"Domain distribution:\n{df['Domain'].value_counts()}")
         logger.info(f"Domain classes: {df['Domain'].nunique()}")
 
         X_text = df["Skills"]
@@ -151,6 +168,7 @@ class DomainClassifierTrainer:
         metrics: dict[str, float],
         dataset_version: str,
         run_id: str | None,
+        registry_report: dict[str, Any] | None = None,
     ) -> None:
         metadata = {
             "model_name": best_name,
@@ -160,9 +178,9 @@ class DomainClassifierTrainer:
             "dataset_version": dataset_version,
             "metrics": metrics,
             "mlflow_run_id": run_id,
+            "registry": registry_report or {"registered": False},
             "domains": list(self.label_encoder.classes_),
         }
-
         metadata_path = Path(settings.MODEL_METADATA_PATH)
         metadata_path.parent.mkdir(parents=True, exist_ok=True)
         with open(metadata_path, "w", encoding="utf-8") as f:
@@ -201,6 +219,7 @@ class DomainClassifierTrainer:
         }
 
         run_id: str | None = None
+        registry_report: dict[str, Any] = {"registered": False}
         try:
             run_id = self.mlflow_logger.log_model(
                 model_name=best_name,
@@ -219,19 +238,31 @@ class DomainClassifierTrainer:
                     "dataset_path": str(self.dataset_path),
                 },
             )
+            registry_report = self.mlflow_logger.register_and_promote(
+                run_id=run_id,
+                metrics=metrics,
+            )
         except Exception as error:
-            logger.error(f"MLflow logging failed (model artifacts were still saved locally): {error}")
+            logger.error(f"MLflow logging/registration failed (model artifacts were still saved locally): {error}")
 
-        self.save_metadata(best_name, metrics, dataset_version, run_id)
+        self.save_metadata(best_name, metrics, dataset_version, run_id, registry_report)
 
         logger.info("=" * 70)
         logger.info("Training Completed")
         logger.info("=" * 70)
         logger.info(f"Best Model : {best_name}")
         logger.info(f"Metrics    : {metrics}")
+        logger.info(f"Registry   : {registry_report}")
         logger.info("Saved : best_model.pkl, vectorizer.pkl, label_encoder.pkl, model_metrics.csv, model_metadata.json")
 
-        return {"best_model": best_name, "metrics": metrics, "dataset_version": dataset_version, "mlflow_run_id": run_id}
+        return {
+            "best_model": best_name,
+            "metrics": metrics,
+            "dataset_version": dataset_version,
+            "mlflow_run_id": run_id,
+            "registry": registry_report,
+        }
+       
 
 
 if __name__ == "__main__":

@@ -11,6 +11,7 @@ const LandingPage = lazy(() => import('@/pages/LandingPage'));
 const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
 const UploadResumePage = lazy(() => import('@/pages/UploadResumePage'));
 const RecommendationsPage = lazy(() => import('@/pages/RecommendationsPage'));
+const BrowsePage = lazy(() => import('@/pages/BrowserPage'));
 const SkillGapPage = lazy(() => import('@/pages/SkillGapPage'));
 const LearningRoadmapPage = lazy(() => import('@/pages/LearningRoadmapPage'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
@@ -43,6 +44,7 @@ export default function App() {
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/upload-resume" element={<UploadResumePage />} />
                 <Route path="/recommendations" element={<RecommendationsPage />} />
+                <Route path="/browse" element={<BrowsePage />} />
                 <Route path="/skill-gap" element={<SkillGapPage />} />
                 <Route path="/learning-roadmap" element={<LearningRoadmapPage />} />
                 <Route path="/profile" element={<ProfilePage />} />

@@ -1,0 +1,47 @@
+{
+  "model_name": "Logistic Regression",
+  "model_version": "20260827073303",
+  "trained_at": "2026-08-27T07:33:03.650409+00:00",
+  "dataset_path": "data\\final\\training_dataset_domain.csv",
+  "dataset_version": "2551a4cf6401",
+  "metrics": {
+    "Accuracy": 0.6248085758039816,
+    "Precision": 0.6356688008053213,
+    "Recall": 0.6248085758039816,
+    "F1": 0.6114379063226779
+  },
+  "mlflow_run_id": "22a1bfeee2fa42dd830743f469400796",
+  "registry": {
+    "registered": true,
+    "model_name": "internship-domain-classifier",
+    "version": 2,
+    "promoted_to_production": false,
+    "reason": "F1 did not improve (0.6114379063226779 <= 0.6249373265275179)",
+    "candidate_metric": 0.6114379063226779,
+    "previous_production_metric": 0.6249373265275179
+  },
+  "domains": [
+    "Artificial Intelligence",
+    "Backend Development",
+    "Business Development",
+    "Cloud Computing",
+    "Content Writing",
+    "Customer Support",
+    "Data Science",
+    "DevOps",
+    "Digital Marketing",
+    "Education",
+    "Finance",
+    "Frontend Development",
+    "Full Stack Development",
+    "Graphic Design",
+    "Human Resources",
+    "Machine Learning",
+    "Mobile Development",
+    "Operations",
+    "Others",
+    "QA Testing",
+    "UI UX",
+    "Video Editing"
+  ]
+}

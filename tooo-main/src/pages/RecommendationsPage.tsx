@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, SlidersHorizontal, MapPin, Wifi, Building2, Cpu, X, FileText } from 'lucide-react';
-import { PageTransition, GlassCard, InternshipCard, CardSkeleton, EmptyState, DomainBadge, GradientButton } from '@/components/shared';
+import { PageTransition, GlassCard, InternshipCard, CardSkeleton, EmptyState, DomainBadge, TopDomainsList, GradientButton } from '@/components/shared';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
@@ -89,6 +89,10 @@ export default function RecommendationsPage() {
           </div>
           <DomainBadge domain={result.predictedDomain} size="sm" />
         </div>
+
+        {result.predictedDomains.length > 1 && (
+          <TopDomainsList domains={result.predictedDomains} />
+        )}
 
         {/* Filters */}
         <GlassCard className="p-5">

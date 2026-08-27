@@ -21,7 +21,7 @@ class Settings:
     # ------------------------------------------------------------------
     DATASET_PATH: str = "data/final/training_dataset_domain.csv"
 
-    EMBEDDING_PATH: str = "src/models/saved/internship_embeddings.npy"
+    EMBEDDING_PATH: str = "data/embeddings/internship_embeddings.npy"
     EMBEDDING_INDEX_PATH: str = "data/embeddings/internship_index.csv"
 
     SKILLS_DICTIONARY_PATH: str = "data/knowledge/skills.json"
@@ -53,9 +53,11 @@ class Settings:
     # CORS
     # ------------------------------------------------------------------
     CORS_ORIGINS: list[str] = [
-        "http://localhost:5173",
+        "http://localhost:5173",   # vite dev server
+        "http://localhost:4173",   # vite preview (production build served locally)
         "http://localhost:3000",
         "http://127.0.0.1:5173",
+        "http://127.0.0.1:4173",
         "http://127.0.0.1:3000",
     ]
 

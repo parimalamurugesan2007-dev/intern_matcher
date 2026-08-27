@@ -1,7 +1,10 @@
 // ---------------------------------------------------------------------------
-// Types — aligned to the ONLY two real backend endpoints:
-//   GET  /            -> { message, status }
-//   POST /recommend   -> { profile, predicted_domain, recommendations }
+// Types — aligned to the real backend endpoints:
+//   GET  /                          -> { message, status }
+//   GET  /health                    -> artifact/service health detail
+//   POST /recommend                 -> { profile, predicted_domain, predicted_domains, recommendations }
+//   GET  /recommend/domain/{domain} -> { domain, count, internships }
+//   GET  /internships/search        -> { filters, count, internships }
 //
 // Because the backend's `profile` and `recommendations` field names are not
 // pinned down here, the raw shapes are kept loose and a normalizer
@@ -13,14 +16,65 @@
 export type RawRecord = Record<string, unknown>;
 
 export interface HealthResponse {
-  message: string;
-  status: string;
+  status: 'healthy' | 'degraded' | string;
+  artifacts: {
+    best_model: boolean;
+    vectorizer: boolean;
+    label_encoder: boolean;
+    dataset: boolean;
+    embeddings: boolean;
+  };
+  services: {
+    profile_extractor: boolean;
+    domain_predictor: boolean;
+    recommendation_engine: boolean;
+  };
+  errors: {
+    domain_predictor: string | null;
+    recommendation_engine: string | null;
+  };
+}
+
+// One entry of the Top-K domain prediction list.
+export interface TopDomain {
+  domain: string;
+  confidence: number; // 0-1
 }
 
 export interface RecommendResponse {
   profile: RawRecord;
   predicted_domain: string;
+  predicted_domains?: TopDomain[];
   recommendations: RawRecord[];
+}
+
+// POST /resume/upload -> { filename, extracted_skills, predicted_domains }
+// Skills-only + Top-5 domains, no recommendations (lighter than /recommend).
+export interface ResumeUploadResponse {
+  filename: string;
+  extracted_skills: string[];
+  predicted_domains: TopDomain[];
+}
+
+// GET /recommend/domain/{domain} and GET /internships/search share this shape.
+export interface InternshipListResponse {
+  count: number;
+  internships: RawRecord[];
+  domain?: string;
+  filters?: Record<string, string | number | null | undefined>;
+}
+
+export interface InternshipSearchFilters {
+  location?: string;
+  domain?: string;
+  mode?: string;
+  duration?: string;
+  stipend?: string;
+  min_stipend?: number;
+  company?: string;
+  skills?: string; // comma-separated
+  keyword?: string;
+  top_k?: number;
 }
 
 // Canonical frontend types (produced by the normalizer)
@@ -112,6 +166,7 @@ export interface Internship {
 export interface RecommendResult {
   profile: Profile;
   predictedDomain: string;
+  predictedDomains: TopDomain[];
   recommendations: Internship[];
   sourceFileName: string;
 }

@@ -9,9 +9,13 @@ interface InternshipCardProps {
   delay?: number;
   onApply?: () => void;
   onSave?: () => void;
+  // Hide the "% Match" badge for non-personalized results (domain browse /
+  // manual search), where there's no resume to score against — showing a
+  // percentage there would be fabricated, not a real computed match.
+  hideMatch?: boolean;
 }
 
-export function InternshipCard({ internship, delay = 0, onApply, onSave }: InternshipCardProps) {
+export function InternshipCard({ internship, delay = 0, onApply, onSave, hideMatch = false }: InternshipCardProps) {
   const match = internship.matchPercentage;
   const matchColor =
     match >= 85 ? 'from-emerald-500 to-emerald-600' : match >= 70 ? 'from-blue-500 to-violet-500' : 'from-amber-500 to-orange-600';
@@ -39,10 +43,12 @@ export function InternshipCard({ internship, delay = 0, onApply, onSave }: Inter
           </div>
         </div>
         <div className="flex flex-col items-end gap-1">
-          <div className={cn('flex items-center gap-1.5 rounded-full bg-gradient-to-r px-2.5 py-1 text-xs font-bold text-white', matchColor)}>
-            <span className="h-1.5 w-1.5 rounded-full bg-white" />
-            {match}% Match
-          </div>
+          {!hideMatch && (
+            <div className={cn('flex items-center gap-1.5 rounded-full bg-gradient-to-r px-2.5 py-1 text-xs font-bold text-white', matchColor)}>
+              <span className="h-1.5 w-1.5 rounded-full bg-white" />
+              {match}% Match
+            </div>
+          )}
           {internship.recommendationLevel && (
             <span className={cn(
               'rounded-full px-2 py-0.5 text-[10px] font-semibold',

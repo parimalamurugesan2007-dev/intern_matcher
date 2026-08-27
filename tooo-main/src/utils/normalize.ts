@@ -20,6 +20,7 @@ import type {
   RecommendResponse,
   RecommendResult,
   Skill,
+  TopDomain,
 } from '@/types';
 
 const STR = (v: unknown): string => (v == null ? '' : String(v));
@@ -236,7 +237,7 @@ export function normalizeRecommendation(r: RawRecord, index: number): Internship
     : 'Not specified';
 
   return {
-    id: STR(r['id'] ?? r['_id'] ?? `rec_${index}`),
+    id: STR(r['id'] ?? r['_id'] ?? r['Internship Id'] ?? r['internship_id'] ?? `rec_${index}`),
     company,
     role,
     location,
@@ -271,8 +272,20 @@ export function normalizeRecommendResponse(
     rawAny['domain'] ??
     'General'
   );
+  const predictedDomains: TopDomain[] = Array.isArray(raw.predicted_domains)
+    ? raw.predicted_domains.map((d) => ({ domain: STR(d.domain), confidence: NUM(d.confidence) }))
+    : [];
   const recommendations = (raw.recommendations ?? []).map((r, i) =>
     normalizeRecommendation(r as RawRecord, i)
   );
-  return { profile, predictedDomain, recommendations, sourceFileName };
+  return { profile, predictedDomain, predictedDomains, recommendations, sourceFileName };
+}
+
+// ---- Internship list responses: GET /recommend/domain/{domain}, GET /internships/search ----
+// Same underlying dataset row shape as /recommend's `recommendations`, just
+// without match/skill-gap scoring (these are browse/search results, not
+// personalized matches) — normalizeRecommendation already defaults those
+// fields gracefully when absent.
+export function normalizeInternshipList(records: RawRecord[]): Internship[] {
+  return records.map((r, i) => normalizeRecommendation(r, i));
 }

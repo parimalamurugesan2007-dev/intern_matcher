@@ -14,4 +14,5 @@ export { Skeleton, CardSkeleton, StatCardSkeleton, ChartSkeleton } from './Skele
 export { ChartTooltip } from './ChartTooltip';
 export { InternshipCard } from './InternshipCard';
 export { DomainBadge } from './DomainBadge';
+export { TopDomainsList } from './TopDomainsList';
 export { EmptyState } from './EmptyState';

@@ -38,6 +38,7 @@ import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 
 from src.config.settings import settings
+from src.domain.normalizer import normalize_domain
 from src.models.embedding_model import EmbeddingModel
 from src.recommender.skill_gap_analyzer import SkillGapAnalyzer
 from src.utils.logger import logger
@@ -264,12 +265,18 @@ class RecommendationEngine:
         domain: str,
         top_k: int = 10,
     ) -> pd.DataFrame:
-        """Return internships belonging to a specific domain."""
+        """Return internships belonging to a specific domain.
 
-        logger.info(f"Domain-specific recommendation requested: {domain}")
+        `domain` is normalized through the single canonical normalizer
+        before matching, so "ai", "AI/ML", "Artificial Intelligence" etc.
+        all resolve to the same dataset rows.
+        """
+
+        canonical_domain = normalize_domain(domain)
+        logger.info(f"Domain-specific recommendation requested: '{domain}' -> '{canonical_domain}'")
 
         filtered = self.dataset[
-            self.dataset["Domain"].str.lower() == domain.lower()
+            self.dataset["Domain"].str.lower() == canonical_domain.lower()
         ]
 
         if filtered.empty:
@@ -279,9 +286,11 @@ class RecommendationEngine:
         filtered = filtered.reset_index(drop=True)
 
         columns = [
+            "Internship Id",
             "Role",
             "Company Name",
             "Location",
+            "Intern Type",
             "Duration",
             "Stipend",
             "Average Stipend",
@@ -305,6 +314,7 @@ class RecommendationEngine:
         mode: str | None = None,
         duration: str | None = None,
         stipend: str | None = None,
+        min_stipend: float | None = None,
         company: str | None = None,
         skills: str | None = None,
         keyword: str | None = None,
@@ -315,6 +325,11 @@ class RecommendationEngine:
 
         All non-None filters are combined with AND logic.
         Text filters use case-insensitive substring matching.
+
+        `domain` is normalized through the canonical normalizer before
+        matching. `min_stipend` is a true numeric minimum (compared
+        against the "Average Stipend" column); `stipend` is kept as a
+        legacy free-text filter for backward compatibility.
         """
 
         df = self.dataset.copy()
@@ -324,10 +339,11 @@ class RecommendationEngine:
             if "Location" in df.columns:
                 df = df[df["Location"].fillna("").str.lower().str.contains(location.lower())]
 
-        # Domain
+        # Domain (normalized: "ai", "AI/ML", "Artificial Intelligence" all match)
         if domain:
             if "Domain" in df.columns:
-                df = df[df["Domain"].fillna("").str.lower().str.contains(domain.lower())]
+                canonical_domain = normalize_domain(domain)
+                df = df[df["Domain"].fillna("").str.lower() == canonical_domain.lower()]
 
         # Mode (Intern Type)
         if mode:
@@ -340,7 +356,11 @@ class RecommendationEngine:
             if "Duration" in df.columns:
                 df = df[df["Duration"].fillna("").str.lower().str.contains(duration.lower())]
 
-        # Stipend
+        # Minimum stipend (true numeric filter)
+        if min_stipend is not None and "Average Stipend" in df.columns:
+            df = df[pd.to_numeric(df["Average Stipend"], errors="coerce").fillna(0) >= min_stipend]
+
+        # Legacy free-text stipend filter (kept for backward compatibility)
         if stipend:
             stipend_col = "Average Stipend" if "Average Stipend" in df.columns else "Stipend"
             if stipend_col in df.columns:
@@ -372,9 +392,11 @@ class RecommendationEngine:
         df = df.reset_index(drop=True)
 
         columns = [
+            "Internship Id",
             "Role",
             "Company Name",
             "Location",
+            "Intern Type",
             "Duration",
             "Stipend",
             "Average Stipend",
