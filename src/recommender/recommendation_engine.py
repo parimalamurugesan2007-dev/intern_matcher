@@ -59,7 +59,7 @@ class RecommendationEngine:
 
         self.skill_gap = SkillGapAnalyzer()
         self.embedding_model = EmbeddingModel()
-
+        self.embedding_model.load()
         logger.info("=" * 70)
         logger.info("Loading Recommendation Engine")
         logger.info("=" * 70)
