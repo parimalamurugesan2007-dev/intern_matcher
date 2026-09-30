@@ -9,29 +9,20 @@ scipy
 joblib
 
 sentence-transformers
-transformers
-torch
-huggingface-hub
-safetensors
-tokenizers
 
 PyMuPDF
 python-docx
-
 openpyxl
 pyarrow
 python-dateutil
+
 python-jose[cryptography]
 passlib[bcrypt]
+email-validator
+
 requests
 tqdm
-
 rapidfuzz
-
 xgboost
-mlflow
-dvc
 
-pytest
 httpx
-email-validator
