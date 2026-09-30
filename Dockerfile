@@ -32,13 +32,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # run `dvc pull` (with a configured remote) either in a build stage or
 # before `docker build`, so the files below actually exist in the context.
 COPY src ./src
+COPY backend ./backend
 COPY data ./data
-
-# Model artifacts (best_model.pkl, vectorizer.pkl, label_encoder.pkl, embeddings)
-# already live under src/models/saved and are copied by `COPY src ./src` above.
+COPY internship_platform.db ./internship_platform.db
 
 RUN mkdir -p logs
-
 EXPOSE 8000
 
 ENV PYTHONUNBUFFERED=1
