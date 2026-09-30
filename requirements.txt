@@ -19,6 +19,7 @@ python-dateutil
 python-jose[cryptography]
 passlib[bcrypt]
 email-validator
+SQLAlchemy
 
 requests
 tqdm
