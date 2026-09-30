@@ -21,40 +21,71 @@ from src.utils.logger import logger
 
 
 class EmbeddingModel:
-    """Thin wrapper around SentenceTransformer with lazy, one-time loading."""
+    """Shared wrapper around SentenceTransformer."""
 
     _shared_model: Optional[SentenceTransformer] = None
+    _shared_model_name: Optional[str] = None
 
-    def __init__(self, model_name: str = settings.EMBEDDING_MODEL_NAME) -> None:
+    def __init__(
+        self,
+        model_name: str = settings.EMBEDDING_MODEL_NAME
+    ) -> None:
         self.model_name = model_name
-        self.model: Optional[SentenceTransformer] = None
 
+    # ---------------------------------------------------------
+    # MODEL LOADING
     # ---------------------------------------------------------
 
     def load(self) -> SentenceTransformer:
-        """Load the model once (per instance) and cache it."""
+        """
+        Load the SentenceTransformer model only once.
 
-        if self.model is None:
+        All EmbeddingModel instances reuse the same
+        underlying SentenceTransformer object.
+        """
+
+        if EmbeddingModel._shared_model is None:
+
             logger.info("=" * 60)
             logger.info("Loading Embedding Model")
             logger.info("=" * 60)
 
-            self.model = SentenceTransformer(self.model_name)
+            EmbeddingModel._shared_model = SentenceTransformer(
+                self.model_name
+            )
 
-            logger.info(f"Model Loaded : {self.model_name}")
+            EmbeddingModel._shared_model_name = self.model_name
 
-        return self.model
+            logger.info(
+                f"Model Loaded : {self.model_name}"
+            )
 
+        return EmbeddingModel._shared_model
+
+    # ---------------------------------------------------------
+    # EMBEDDING DIMENSION
     # ---------------------------------------------------------
 
     def embedding_dimension(self) -> int:
+        """Return embedding dimension of the loaded model."""
+
         model = self.load()
+
         return model.get_embedding_dimension()
 
     # ---------------------------------------------------------
+    # ENCODING
+    # ---------------------------------------------------------
 
-    def encode(self, texts, show_progress: bool = True):
+    def encode(
+        self,
+        texts,
+        show_progress: bool = True
+    ):
+        """Generate normalized embeddings for the supplied texts."""
+
         model = self.load()
+
         return model.encode(
             texts,
             show_progress_bar=show_progress,
