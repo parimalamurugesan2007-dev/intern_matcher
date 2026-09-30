@@ -34,3 +34,4 @@ dvc
 
 pytest
 httpx
+email-validator
