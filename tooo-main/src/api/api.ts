@@ -1,8 +1,8 @@
 import axios, { AxiosError } from 'axios';
 
 // Base URL for the existing FastAPI backend.
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000';
-
+const BASE_URL = "https://intern-matcher-backend.onrender.com";
+console.log("BACKEND URL:", BASE_URL);
 export const api = axios.create({
   baseURL: BASE_URL,
   timeout: 60000,
