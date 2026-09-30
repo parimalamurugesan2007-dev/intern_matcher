@@ -24,7 +24,7 @@ class EmbeddingModel:
     """Shared wrapper around SentenceTransformer."""
 
     _shared_model: Optional[SentenceTransformer] = None
-    _shared_model_name: Optional[str] = None
+    
 
     def __init__(
         self,
@@ -54,7 +54,7 @@ class EmbeddingModel:
                 self.model_name
             )
 
-            EmbeddingModel._shared_model_name = self.model_name
+            
 
             logger.info(
                 f"Model Loaded : {self.model_name}"
