@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { PageTransition, GlassCard, SkillBadge, BlobBackground, DomainBadge, EmptyState, GradientButton } from '@/components/shared';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useRecommendResult } from '@/hooks';
+import { useRecommendResult, useUserProfile } from '@/hooks';
 import { getInitials } from '@/utils/format';
 import { toast } from '@/hooks/use-toast';
 import type { LucideIcon } from 'lucide-react';
@@ -26,6 +26,7 @@ import type { LucideIcon } from 'lucide-react';
 export default function ProfilePage() {
   const { result } = useRecommendResult();
   const [editing, setEditing] = useState(false);
+  const { data: userProfile } = useUserProfile();
 
   if (!result) {
     return (
@@ -41,7 +42,8 @@ export default function ProfilePage() {
   }
 
   const { profile, predictedDomain } = result;
-  const name = profile.name || 'Your Profile';
+  const name = userProfile?.name || profile.name || 'Your Profile';
+  const email = userProfile?.email || profile.email || '';
 
   return (
     <PageTransition>
@@ -93,7 +95,7 @@ export default function ProfilePage() {
               <h3 className="text-base font-semibold text-white">Personal Information</h3>
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
                 <InfoRow icon={Pencil} label="Full Name" value={profile.name} />
-                <InfoRow icon={Mail} label="Email" value={profile.email} />
+                <InfoRow icon={Mail} label="Email" value={email} />
                 <InfoRow icon={Phone} label="Phone" value={profile.phone} />
                 <InfoRow icon={MapPin} label="Location" value={profile.location} />
                 <InfoRow icon={Building2} label="College" value={profile.college} />

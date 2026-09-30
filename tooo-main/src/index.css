@@ -210,3 +210,17 @@
   0%, 100% { opacity: 0.6; box-shadow: 0 0 30px rgba(59,130,246,0.3); }
   50% { opacity: 1; box-shadow: 0 0 60px rgba(59,130,246,0.55); }
 }
+@media print {
+  aside, nav, header, .no-print, button {
+    display: none !important;
+  }
+  main {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}

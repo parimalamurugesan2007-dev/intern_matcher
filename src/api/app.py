@@ -33,7 +33,8 @@ from typing import Any, Optional
 
 from fastapi import FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-
+from backend.database import init_db
+from backend.router import router as auth_user_router
 from src.config.settings import settings
 from src.domain.normalizer import normalize_domain
 from src.domain.predict import DomainPredictor
@@ -91,7 +92,8 @@ async def lifespan(app: FastAPI):
         ml_state["engine_error"] = str(error)
 
     logger.info("Startup complete")
-
+    init_db()
+    logger.info("Database initialized")
     yield
 
     logger.info("Application shutdown")
@@ -111,7 +113,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+app.include_router(auth_user_router)
 # ---------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------

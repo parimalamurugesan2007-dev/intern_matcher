@@ -6,6 +6,7 @@ import { getErrorMessage } from '@/api/api';
 import type { InternshipSearchFilters, RecommendResult, TopDomain } from '@/types';
 
 export { useRecommendResult } from './RecommendContext';
+export { useAuth, AuthProvider } from './AuthContext';
 export { getErrorMessage } from '@/api/api';
 
 // The main data mutation in the app: POST /recommend with a resume file.
@@ -61,6 +62,70 @@ export function useInternshipSearch(filters: InternshipSearchFilters, enabled: b
       filters: data.filters,
       internships: normalizeInternshipList(data.internships),
     }),
+  });
+}
+
+// ---- Auth hooks ----
+export function useLogin() {
+  return useMutation({
+    mutationFn: ({ email, password }: { email: string; password: string }) =>
+      backendService.login(email, password),
+  });
+}
+
+export function useRegister() {
+  return useMutation({
+    mutationFn: ({ name, email, password }: { name: string; email: string; password: string }) =>
+      backendService.register(name, email, password),
+  });
+}
+
+// ---- User profile ----
+export function useUserProfile() {
+  return useQuery({
+    queryKey: ['userProfile'],
+    queryFn: () => backendService.getProfile(),
+  });
+}
+
+export function useChangePassword() {
+  return useMutation({
+    mutationFn: ({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }) =>
+      backendService.changePassword(currentPassword, newPassword),
+  });
+}
+
+// ---- Saved internships ----
+export function useSavedInternships() {
+  return useQuery({
+    queryKey: ['savedInternships'],
+    queryFn: () => backendService.getSavedInternships(),
+  });
+}
+
+export function useSaveInternship() {
+  return useMutation({
+    mutationFn: backendService.saveInternship,
+  });
+}
+
+export function useDeleteSavedInternship() {
+  return useMutation({
+    mutationFn: (id: number) => backendService.deleteSavedInternship(id),
+  });
+}
+
+// ---- Applied internships ----
+export function useAppliedInternships() {
+  return useQuery({
+    queryKey: ['appliedInternships'],
+    queryFn: () => backendService.getAppliedInternships(),
+  });
+}
+
+export function useApplyInternship() {
+  return useMutation({
+    mutationFn: backendService.applyInternship,
   });
 }
 

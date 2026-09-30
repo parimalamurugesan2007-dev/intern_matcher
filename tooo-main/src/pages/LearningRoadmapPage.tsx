@@ -67,7 +67,7 @@ export default function LearningRoadmapPage() {
           </div>
           <div className="flex items-center gap-2">
             <DomainBadge domain={result.predictedDomain} size="sm" />
-            <GradientButton size="default" onClick={() => toast({ title: 'Roadmap exported', description: 'Your learning roadmap has been downloaded.' })}>
+            <GradientButton size="default" onClick={() => window.print()}>
               <Map className="h-4 w-4" /> Export
             </GradientButton>
           </div>

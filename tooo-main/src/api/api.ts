@@ -11,6 +11,15 @@ export const api = axios.create({
   },
 });
 
+// Attach the JWT token (if present in localStorage) to every request.
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 // Surface a readable error message from any failed request.
 export function getErrorMessage(error: unknown): string {
   const axiosError = error as AxiosError<{ detail?: string; message?: string }>;

@@ -17,11 +17,9 @@ export function Logo({ className, to = '/', showText = true }: LogoProps) {
       </span>
       {showText && (
         <span className="flex flex-col leading-none">
-          <span className="text-[15px] font-bold tracking-tight text-white">
-            AI Internship
-          </span>
-          <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-blue-400">
-            Matcher
+          
+          <span className="text-[20px] font-medium uppercase tracking-[0.20em] text-blue-400">
+            VOLTIQUE
           </span>
         </span>
       )}

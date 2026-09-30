@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   LayoutDashboard,
@@ -18,10 +18,11 @@ import {
   Sun,
   Upload,
   Compass,
+  LogOut,
 } from 'lucide-react';
 import { Logo } from '@/components/shared';
 import { useTheme } from '@/components/shared';
-import { useRecommendResult } from '@/hooks';
+import { useRecommendResult, useAuth } from '@/hooks';
 import { getInitials } from '@/utils/format';
 import { cn } from '@/lib/utils';
 
@@ -32,8 +33,8 @@ const navItems = [
   { label: 'Browse', to: '/browse', icon: Compass },
   { label: 'Skill Gap', to: '/skill-gap', icon: GitCompareArrows },
   { label: 'Learning Roadmap', to: '/learning-roadmap', icon: Map },
-  { label: 'Applications', to: '/recommendations', icon: Send },
-  { label: 'Saved', to: '/recommendations', icon: Bookmark },
+  { label: 'Applications', to: '/applications', icon: Send },
+  { label: 'Saved', to: '/saved', icon: Bookmark },
   { label: 'Profile', to: '/profile', icon: User },
   { label: 'Settings', to: '/settings', icon: Settings },
 ];
@@ -41,11 +42,17 @@ const navItems = [
 export function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
   const { result } = useRecommendResult();
-  const profile = result?.profile;
-  const displayName = profile?.name || 'Guest';
-  const displaySub = profile?.email || 'Upload a resume to begin';
+  const { user, logout } = useAuth();
+  const displayName = user?.name || result?.profile.name || 'Guest';
+  const displaySub = user?.email || result?.profile.email || 'Upload a resume to begin';
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   const Sidebar = (
     <div className="flex h-full flex-col">
@@ -88,6 +95,13 @@ export function DashboardLayout() {
           </div>
           {!result && <Upload className="h-4 w-4 text-blue-400" />}
         </Link>
+        <button
+          onClick={handleLogout}
+          className="mt-2 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-400 transition-all hover:bg-red-500/10 hover:text-red-300"
+        >
+          <LogOut className="h-4 w-4" />
+          Logout
+        </button>
       </div>
     </div>
   );

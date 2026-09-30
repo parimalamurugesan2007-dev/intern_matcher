@@ -170,3 +170,43 @@ export interface RecommendResult {
   recommendations: Internship[];
   sourceFileName: string;
 }
+
+// ---------------------------------------------------------------------------
+// Auth & user types (new backend endpoints)
+// ---------------------------------------------------------------------------
+export interface AuthUser {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: AuthUser;
+}
+
+export interface UserProfile {
+  name: string;
+  email: string;
+}
+
+export interface SavedInternshipItem {
+  id: number;
+  internship_id: string;
+  role: string;
+  company: string;
+  location: string;
+  stipend: string;
+  domain: string;
+  website_link: string;
+  saved_at: string;
+}
+
+export interface AppliedInternshipItem {
+  id: number;
+  internship_id: string;
+  role: string;
+  company: string;
+  applied_at: string;
+  status: string;
+}

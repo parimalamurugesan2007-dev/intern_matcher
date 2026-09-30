@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Clock, Wallet, Bookmark, ExternalLink, Building2, CheckCircle2, AlertTriangle } from 'lucide-react';
 import type { Internship } from '@/types';
 import { SkillBadge, GradientButton } from '@/components/shared';
+import { useSaveInternship, useApplyInternship, getErrorMessage } from '@/hooks';
+import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 interface InternshipCardProps {
@@ -9,9 +12,6 @@ interface InternshipCardProps {
   delay?: number;
   onApply?: () => void;
   onSave?: () => void;
-  // Hide the "% Match" badge for non-personalized results (domain browse /
-  // manual search), where there's no resume to score against — showing a
-  // percentage there would be fabricated, not a real computed match.
   hideMatch?: boolean;
 }
 
@@ -19,6 +19,58 @@ export function InternshipCard({ internship, delay = 0, onApply, onSave, hideMat
   const match = internship.matchPercentage;
   const matchColor =
     match >= 85 ? 'from-emerald-500 to-emerald-600' : match >= 70 ? 'from-blue-500 to-violet-500' : 'from-amber-500 to-orange-600';
+
+  const saveMutation = useSaveInternship();
+  const applyMutation = useApplyInternship();
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = () => {
+    saveMutation.mutate(
+      {
+        internship_id: internship.id,
+        role: internship.role,
+        company: internship.company,
+        location: internship.location,
+        stipend: internship.stipend,
+        domain: '',
+        website_link: internship.url || '',
+      },
+      {
+        onSuccess: () => {
+          setSaved(true);
+          toast({ title: 'Saved', description: `${internship.role} at ${internship.company} added to your saved list.` });
+          onSave?.();
+        },
+        onError: (err) => {
+          toast({ title: 'Failed to save', description: getErrorMessage(err), variant: 'destructive' });
+        },
+      }
+    );
+  };
+
+  const handleApply = () => {
+    applyMutation.mutate(
+      {
+        internship_id: internship.id,
+        role: internship.role,
+        company: internship.company,
+      },
+      {
+        onSuccess: () => {
+          toast({ title: 'Application started', description: `${internship.role} at ${internship.company} added to your applications.` });
+          if (internship.url) {
+            window.open(internship.url, '_blank', 'noopener,noreferrer');
+          }
+          onApply?.();
+        },
+        onError: (err) => {
+          toast({ title: 'Failed to apply', description: getErrorMessage(err), variant: 'destructive' });
+        },
+      }
+    );
+  };
+
+  const isBusy = saveMutation.isPending || applyMutation.isPending;
 
   return (
     <motion.div
@@ -85,7 +137,6 @@ export function InternshipCard({ internship, delay = 0, onApply, onSave, hideMat
 
       <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-slate-400">{internship.description}</p>
 
-      {/* Matched / missing skills from backend */}
       {(internship.matchedSkills.length > 0 || internship.missingSkills.length > 0) && (
         <div className="mt-3 space-y-2">
           {internship.matchedSkills.length > 0 && (
@@ -131,16 +182,22 @@ export function InternshipCard({ internship, delay = 0, onApply, onSave, hideMat
       </div>
 
       <div className="mt-5 flex items-center gap-2 border-t border-white/10 pt-4">
-        <GradientButton size="sm" className="flex-1" onClick={onApply}>
+        <GradientButton size="sm" className="flex-1" onClick={handleApply} disabled={isBusy}>
           Apply
           <ExternalLink className="h-3.5 w-3.5" />
         </GradientButton>
         <button
-          onClick={onSave}
-          className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-400 transition-all hover:border-blue-500/40 hover:text-blue-400"
+          onClick={handleSave}
+          disabled={isBusy || saved}
+          className={cn(
+            'flex h-9 w-9 items-center justify-center rounded-lg border transition-all',
+            saved
+              ? 'border-blue-500/40 bg-blue-500/15 text-blue-400'
+              : 'border-white/10 bg-white/5 text-slate-400 hover:border-blue-500/40 hover:text-blue-400'
+          )}
           aria-label="Save internship"
         >
-          <Bookmark className="h-4 w-4" />
+          <Bookmark className={cn('h-4 w-4', saved && 'fill-blue-400')} />
         </button>
       </div>
     </motion.div>

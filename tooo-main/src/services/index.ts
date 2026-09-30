@@ -1,11 +1,15 @@
 import api from '@/api/api';
 import type {
+  AppliedInternshipItem,
+  AuthResponse,
   HealthResponse,
   InternshipListResponse,
   InternshipSearchFilters,
   RawRecord,
   RecommendResponse,
   ResumeUploadResponse,
+  SavedInternshipItem,
+  UserProfile,
 } from '@/types';
 
 // The backend endpoints this frontend talks to:
@@ -14,14 +18,20 @@ import type {
 //   POST /recommend                 -> RecommendResponse (profile + domains + recommendations)
 //   GET  /recommend/domain/{domain} -> InternshipListResponse
 //   GET  /internships/search        -> InternshipListResponse
+//   POST /auth/register             -> AuthResponse
+//   POST /auth/login                -> AuthResponse
+//   GET  /user/profile              -> UserProfile
+//   PUT  /user/password             -> { message }
+//   POST /saved                     -> SavedInternshipItem
+//   GET  /saved                     -> SavedInternshipItem[]
+//   DELETE /saved/{id}              -> { message }
+//   POST /applied                   -> AppliedInternshipItem
+//   GET  /applied                   -> AppliedInternshipItem[]
 export const backendService = {
   // GET /health -> artifact/service availability detail
   health: () => api.get<HealthResponse>('/health').then((r) => r.data),
 
   // POST /resume/upload (multipart/form-data, field: "file")
-  // Lighter-weight than /recommend: extracted skills + Top-5 domains only,
-  // no internship recommendations. Used right after upload, before the
-  // user has picked a domain to browse.
   uploadResume: (file: File, onProgress?: (pct: number) => void) => {
     const form = new FormData();
     form.append('file', file);
@@ -53,8 +63,7 @@ export const backendService = {
       .then((r) => r.data);
   },
 
-  // GET /recommend/domain/{domain} — domain is normalized server-side
-  // ("ai", "AI/ML", "Artificial Intelligence" all resolve the same way).
+  // GET /recommend/domain/{domain}
   recommendByDomain: (domain: string, topK = 10) =>
     api
       .get<InternshipListResponse>(`/recommend/domain/${encodeURIComponent(domain)}`, {
@@ -62,11 +71,61 @@ export const backendService = {
       })
       .then((r) => r.data),
 
-  // GET /internships/search — all provided filters are combined with AND logic.
+  // GET /internships/search
   searchInternships: (filters: InternshipSearchFilters) =>
     api
       .get<InternshipListResponse>('/internships/search', { params: filters })
       .then((r) => r.data),
+
+  // ---- Auth ----
+  register: (name: string, email: string, password: string) =>
+    api
+      .post<AuthResponse>('/auth/register', { name, email, password })
+      .then((r) => r.data),
+
+  login: (email: string, password: string) =>
+    api
+      .post<AuthResponse>('/auth/login', { email, password })
+      .then((r) => r.data),
+
+  // ---- User ----
+  getProfile: () =>
+    api.get<UserProfile>('/user/profile').then((r) => r.data),
+
+  changePassword: (currentPassword: string, newPassword: string) =>
+    api
+      .put('/user/password', {
+        current_password: currentPassword,
+        new_password: newPassword,
+      })
+      .then((r) => r.data),
+
+  // ---- Saved ----
+  saveInternship: (data: {
+    internship_id: string;
+    role: string;
+    company: string;
+    location?: string;
+    stipend?: string;
+    domain?: string;
+    website_link?: string;
+  }) => api.post<SavedInternshipItem>('/saved', data).then((r) => r.data),
+
+  getSavedInternships: () =>
+    api.get<SavedInternshipItem[]>('/saved').then((r) => r.data),
+
+  deleteSavedInternship: (id: number) =>
+    api.delete(`/saved/${id}`).then((r) => r.data),
+
+  // ---- Applied ----
+  applyInternship: (data: {
+    internship_id: string;
+    role: string;
+    company: string;
+  }) => api.post<AppliedInternshipItem>('/applied', data).then((r) => r.data),
+
+  getAppliedInternships: () =>
+    api.get<AppliedInternshipItem[]>('/applied').then((r) => r.data),
 };
 
 // Re-export the raw type for convenience.

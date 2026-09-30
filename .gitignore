@@ -13,19 +13,20 @@ env/
 
 # MLflow
 
-
+# MLflow
+mlflow.db
 # DVC cache
 .dvc/cache/
 
 # Model files
-*.pkl
+#*.pkl
 *.joblib
 *.pt
 *.pth
 
 # Dataset
 
-
+logs/
 # VS Code
 .vscode/
 
@@ -37,5 +38,5 @@ env/
 Thumbs.db
 data/processed/internships_processed.csv
 
-data/embeddings/internship_embeddings.npy
-data/embeddings/internship_index.csv
+#data/embeddings/internship_embeddings.npy
+#data/embeddings/internship_index.csv

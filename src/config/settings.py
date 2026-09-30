@@ -53,13 +53,15 @@ class Settings:
     # CORS
     # ------------------------------------------------------------------
     CORS_ORIGINS: list[str] = [
-        "http://localhost:5173",   # vite dev server
-        "http://localhost:4173",   # vite preview (production build served locally)
-        "http://localhost:3000",
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:4173",
-        "http://127.0.0.1:3000",
-    ]
+    "http://localhost:5173",
+    "http://localhost:4173",
+    "http://localhost:3000",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:4173",
+    "http://127.0.0.1:3000",
+    "https://*.vercel.app",
+    "https://*.railway.app",
+]
 
     # ------------------------------------------------------------------
     # MLflow
