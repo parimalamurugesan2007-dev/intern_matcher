@@ -62,7 +62,6 @@ class DomainPredictor:
             return "Others"
 
     # ---------------------------------------------------------
-
     def predict_top_domains(
         self,
         skill_text: str,
@@ -71,8 +70,7 @@ class DomainPredictor:
         """
         Return the Top-K predicted domains with confidence scores.
 
-        Uses model.predict_proba() to get per-class probabilities,
-        then maps indices back to domain labels via the label encoder.
+        "Others" is excluded from the displayed domain predictions.
 
         *skill_text* should be the final extracted skill list
         joined into a single string — NOT the raw resume text.
@@ -82,23 +80,48 @@ class DomainPredictor:
             vector = self.vectorizer.transform([skill_text])
             probabilities = self.model.predict_proba(vector)[0]
 
-            top_indices = probabilities.argsort()[-top_k:][::-1]
+            # ---------------------------------------------------------
+            # Get all domains with their probabilities
+            # ---------------------------------------------------------
 
-            results: list[dict[str, Any]] = []
-            for idx in top_indices:
+            domain_probabilities: list[dict[str, Any]] = []
+
+            for idx, probability in enumerate(probabilities):
                 domain = self.encoder.inverse_transform([idx])[0]
-                confidence = round(float(probabilities[idx]), 4)
-                results.append({
+
+                # Do not show "Others" in Top Predicted Domains
+                if str(domain).strip().lower() == "others":
+                    continue
+
+                domain_probabilities.append({
                     "domain": str(domain),
-                    "confidence": confidence,
+                    "confidence": round(float(probability), 4),
                 })
 
-            logger.info(f"Top-{top_k} domains: {results}")
+            # ---------------------------------------------------------
+            # Sort by confidence
+            # ---------------------------------------------------------
+
+            domain_probabilities.sort(
+                key=lambda item: item["confidence"],
+                reverse=True,
+            )
+
+            # ---------------------------------------------------------
+            # Take Top-K actual domains
+            # ---------------------------------------------------------
+
+            results = domain_probabilities[:top_k]
+
+            logger.info(f"Top-{top_k} domains (excluding Others): {results}")
+
             return results
 
         except Exception as error:
             logger.error(f"Top domain prediction failed: {error}")
-            return [{"domain": "Others", "confidence": 0.0}]
+
+            return []
+    
 
     # ---------------------------------------------------------
 
