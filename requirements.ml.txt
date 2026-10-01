@@ -6,6 +6,6 @@ numpy
 scikit-learn
 joblib
 sentence-transformers
-torch
 PyMuPDF
 python-docx
+rapidfuzz
