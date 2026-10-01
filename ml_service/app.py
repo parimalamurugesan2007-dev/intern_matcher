@@ -98,3 +98,33 @@ async def recommend(file: UploadFile = File(...), top_k: int = Query(default=set
         raise HTTPException(status_code=500, detail="Failed to generate internship recommendations.")
     return {"profile": profile, "predicted_domain": predicted,
             "predicted_domains": domains, "recommendations": records(df)}
+
+@app.get("/ml/recommend/domain/{domain}")
+def recommend_by_domain(domain: str, top_k: int = Query(default=settings.DEFAULT_DOMAIN_RESULTS, ge=1, le=100)):
+    try:
+        df = require("engine").recommend_by_domain(domain=domain, top_k=top_k)
+    except Exception:
+        logger.exception("Domain recommendation failed")
+        raise HTTPException(status_code=500, detail="Failed to fetch internships for this domain.")
+    if df.empty:
+        raise HTTPException(status_code=404, detail=f"No internships found for domain '{domain}'.")
+    return {"domain": domain, "count": len(df), "internships": records(df)}
+
+@app.get("/ml/internships/search")
+def search_internships(
+    location: str | None = None, domain: str | None = None, mode: str | None = None,
+    duration: str | None = None, stipend: str | None = None,
+    min_stipend: float | None = Query(default=None, ge=0),
+    company: str | None = None, skills: str | None = None,
+    keyword: str | None = None, limit: int | None = Query(default=None, ge=1, le=200),
+    top_k: int = Query(default=settings.DEFAULT_SEARCH_LIMIT, ge=1, le=200),
+):
+    try:
+        df = require("engine").search_internships(
+            location=location, domain=domain, mode=mode, duration=duration,
+            stipend=stipend, min_stipend=min_stipend, company=company,
+            skills=skills, keyword=keyword, top_k=limit or top_k)
+    except Exception:
+        logger.exception("Internship search failed")
+        raise HTTPException(status_code=500, detail="Failed to search internships.")
+    return {"count": len(df), "internships": records(df)}
