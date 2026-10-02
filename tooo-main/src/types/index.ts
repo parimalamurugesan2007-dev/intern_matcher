@@ -114,7 +114,12 @@ export interface ExperienceItem {
   end?: string;
   description?: string;
 }
-
+export interface AchievementItem {
+  title: string;
+  organization?: string;
+  date?: string;
+  description?: string;
+}
 export interface Profile {
   name: string;
   email: string;
@@ -133,6 +138,7 @@ export interface Profile {
   linkedin?: string;
   portfolio?: string;
   raw: RawRecord;
+  achievements: AchievementItem[];
 }
 
 export interface LearningResource {

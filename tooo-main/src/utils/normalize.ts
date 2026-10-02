@@ -9,6 +9,7 @@
 // ---------------------------------------------------------------------------
 
 import type {
+  AchievementItem,
   CertificateItem,
   EducationItem,
   ExperienceItem,
@@ -168,6 +169,7 @@ export function normalizeProfile(obj: RawRecord): Profile {
     skills: normalizeSkills(obj),
     education: normalizeEducation(obj),
     experience: normalizeExperience(obj),
+    achievements: normalizeAchievements(obj),
     projects: normalizeProjects(obj),
     certificates: normalizeCertificates(obj),
     github: pickStr(obj, ['github', 'github_url']) || undefined,
@@ -176,7 +178,65 @@ export function normalizeProfile(obj: RawRecord): Profile {
     raw: obj,
   };
 }
+// ---- Achievements ----
+function normalizeAchievements(obj: RawRecord): AchievementItem[] {
+  const raw =
+    obj['achievements'] ??
+    obj['accomplishments'] ??
+    obj['honors'] ??
+    obj['awards'];
 
+  if (!Array.isArray(raw)) {
+    if (typeof raw === 'string' && raw.trim()) {
+      return raw
+        .split(/\n|•|;/)
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .map((title) => ({ title }));
+    }
+
+    return [];
+  }
+
+  return raw
+    .map((item) => {
+      if (typeof item === 'string') {
+        return {
+          title: item,
+        };
+      }
+
+      const rec = item as RawRecord;
+
+      return {
+        title: pickStr(rec, [
+          'title',
+          'name',
+          'achievement',
+          'award',
+          'honor',
+        ]),
+        organization: pickStr(rec, [
+          'organization',
+          'issuer',
+          'company',
+          'institution',
+          'event',
+        ]) || undefined,
+        date: pickStr(rec, [
+          'date',
+          'year',
+          'issued',
+        ]) || undefined,
+        description: pickStr(rec, [
+          'description',
+          'details',
+          'summary',
+        ]) || undefined,
+      };
+    })
+    .filter((item) => item.title);
+}
 // Parse a skills value that may be a JSON array string like "['Python', 'Java']" or
 // a real array. The backend serializes DataFrame list columns as Python repr strings.
 function parseSkillsField(v: unknown): string[] {

@@ -11,6 +11,7 @@ import {
   Award,
   FolderGit2,
   Briefcase,
+  Trophy,
   Sparkles,
   FileText,
   MapPin,
@@ -159,61 +160,220 @@ export default function ProfilePage() {
           </TabsContent>
 
           {/* Education + experience */}
+          {/* Education + Experience + Achievements + Certifications */}
           <TabsContent value="resume" className="space-y-4">
             <div className="grid gap-4 lg:grid-cols-2">
-              <GlassCard>
-                <h3 className="flex items-center gap-2 text-base font-semibold text-white">
-                  <GraduationCap className="h-4.5 w-4.5 text-blue-400" /> Education
-                </h3>
-                <div className="mt-4 space-y-3">
-                  {profile.education.length === 0 ? (
-                    <p className="text-sm text-slate-400">No education entries detected.</p>
-                  ) : (
-                    profile.education.map((edu, i) => (
-                      <div key={i} className="rounded-xl border border-white/10 bg-white/5 p-4">
-                        <p className="text-sm font-semibold text-white">{edu.institution}</p>
-                        <p className="text-xs text-slate-400">{edu.degree}{edu.field ? ` · ${edu.field}` : ''}</p>
-                        {(edu.startYear || edu.endYear) && <p className="mt-1 text-xs text-slate-500">{edu.startYear} – {edu.endYear}{edu.gpa ? ` · GPA ${edu.gpa}` : ''}</p>}
-                      </div>
-                    ))
-                  )}
-                </div>
-              </GlassCard>
 
-              <GlassCard>
-                <h3 className="flex items-center gap-2 text-base font-semibold text-white">
-                  <Briefcase className="h-4.5 w-4.5 text-blue-400" /> Experience
-                </h3>
-                <div className="mt-4 space-y-3">
-                  {profile.experience.length === 0 ? (
-                    <p className="text-sm text-slate-400">No experience entries detected.</p>
-                  ) : (
-                    profile.experience.map((exp, i) => (
-                      <div key={i} className="rounded-xl border border-white/10 bg-white/5 p-4">
-                        <p className="text-sm font-semibold text-white">{exp.role}{exp.company ? ` · ${exp.company}` : ''}</p>
-                        {(exp.start || exp.end) && <p className="text-xs text-slate-500">{exp.start} – {exp.end ?? 'Present'}</p>}
-                        {exp.description && <p className="mt-2 text-sm text-slate-400">{exp.description}</p>}
-                      </div>
-                    ))
-                  )}
-                </div>
+              {/* LEFT COLUMN */}
+              <div className="space-y-4">
 
-                {profile.certificates.length > 0 && (
-                  <div className="mt-5">
-                    <h4 className="flex items-center gap-2 text-sm font-semibold text-white">
-                      <Award className="h-4 w-4 text-emerald-400" /> Certificates
-                    </h4>
-                    <div className="mt-3 space-y-2">
-                      {profile.certificates.map((c, i) => (
-                        <div key={i} className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400"><Award className="h-4 w-4" /></div>
-                          <div><p className="text-sm font-medium text-white">{c.title}</p><p className="text-xs text-slate-400">{c.issuer}{c.date ? ` · ${c.date}` : ''}</p></div>
+                {/* Education */}
+                <GlassCard>
+                  <h3 className="flex items-center gap-2 text-base font-semibold text-white">
+                    <GraduationCap className="h-4.5 w-4.5 text-blue-400" />
+                    Education
+                  </h3>
+
+                  <div className="mt-4 space-y-3">
+                    {profile.education.length === 0 ? (
+                      <p className="text-sm text-slate-400">
+                        No education entries detected.
+                      </p>
+                    ) : (
+                      profile.education.map((edu, i) => (
+                        <div
+                          key={i}
+                          className="rounded-xl border border-white/10 bg-white/5 p-4"
+                        >
+                          <p className="text-sm font-semibold text-white">
+                            {edu.institution}
+                          </p>
+
+                          <p className="mt-1 text-xs text-slate-400">
+                            {edu.degree}
+                            {edu.field ? ` · ${edu.field}` : ''}
+                          </p>
+
+                          {(edu.startYear || edu.endYear || edu.gpa) && (
+                            <p className="mt-1 text-xs text-slate-500">
+                              {edu.startYear || ''}
+                              {edu.startYear || edu.endYear ? ' – ' : ''}
+                              {edu.endYear || ''}
+                              {edu.gpa ? ` · GPA ${edu.gpa}` : ''}
+                            </p>
+                          )}
                         </div>
-                      ))}
-                    </div>
+                      ))
+                    )}
                   </div>
-                )}
-              </GlassCard>
+                </GlassCard>
+
+
+                {/* Internships */}
+                <GlassCard>
+                  <h3 className="flex items-center gap-2 text-base font-semibold text-white">
+                    <Briefcase className="h-4.5 w-4.5 text-blue-400" />
+                    Internships
+                  </h3>
+
+                  <div className="mt-4 space-y-3">
+                    {profile.experience.length === 0 ? (
+                      <p className="text-sm text-slate-400">
+                        No internship experience detected.
+                      </p>
+                    ) : (
+                      profile.experience.map((exp, i) => (
+                        <div
+                          key={i}
+                          className="rounded-xl border border-white/10 bg-white/5 p-4"
+                        >
+                          <p className="text-sm font-semibold text-white">
+                            {exp.role}
+                          </p>
+
+                          {exp.company && (
+                            <p className="mt-1 text-xs text-slate-400">
+                              {exp.company}
+                            </p>
+                          )}
+
+                          {(exp.start || exp.end) && (
+                            <p className="mt-1 text-xs text-slate-500">
+                              {exp.start || ''}
+                              {exp.start || exp.end ? ' – ' : ''}
+                              {exp.end || 'Present'}
+                            </p>
+                          )}
+
+                          {exp.description && (
+                            <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                              {exp.description}
+                            </p>
+                          )}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </GlassCard>
+
+
+                {/* Achievements */}
+                <GlassCard>
+                  <h3 className="flex items-center gap-2 text-base font-semibold text-white">
+                    <Trophy className="h-4.5 w-4.5 text-amber-400" />
+                    Achievements
+                  </h3>
+
+                  <div className="mt-4 space-y-3">
+                    {profile.achievements.length === 0 ? (
+                      <p className="text-sm text-slate-400">
+                        No achievements detected.
+                      </p>
+                    ) : (
+                      profile.achievements.map((achievement, i) => (
+                        <div
+                          key={i}
+                          className="rounded-xl border border-white/10 bg-white/5 p-4"
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400">
+                              <Trophy className="h-4 w-4" />
+                            </div>
+
+                            <div className="min-w-0">
+                              <p className="text-sm font-semibold text-white">
+                                {achievement.title}
+                              </p>
+
+                              {(achievement.organization || achievement.date) && (
+                                <p className="mt-1 text-xs text-slate-400">
+                                  {achievement.organization || ''}
+                                  {achievement.organization && achievement.date
+                                    ? ' · '
+                                    : ''}
+                                  {achievement.date || ''}
+                                </p>
+                              )}
+
+                              {achievement.description && (
+                                <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                                  {achievement.description}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </GlassCard>
+
+              </div>
+
+
+              {/* RIGHT COLUMN */}
+              <div className="space-y-4">
+
+                {/* Certifications */}
+                <GlassCard className="lg:min-h-full">
+                  <h3 className="flex items-center gap-2 text-base font-semibold text-white">
+                    <Award className="h-4.5 w-4.5 text-emerald-400" />
+                    Certifications
+                  </h3>
+
+                  <div className="mt-4 space-y-3">
+                    {profile.certificates.length === 0 ? (
+                      <p className="text-sm text-slate-400">
+                        No certifications detected.
+                      </p>
+                    ) : (
+                      profile.certificates.map((certificate, i) => (
+                        <div
+                          key={i}
+                          className="rounded-xl border border-white/10 bg-white/5 p-4"
+                        >
+                          <div className="flex items-start gap-3">
+
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+                              <Award className="h-4 w-4" />
+                            </div>
+
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-semibold text-white">
+                                {certificate.title}
+                              </p>
+
+                              {(certificate.issuer || certificate.date) && (
+                                <p className="mt-1 text-xs text-slate-400">
+                                  {certificate.issuer || ''}
+                                  {certificate.issuer && certificate.date
+                                    ? ' · '
+                                    : ''}
+                                  {certificate.date || ''}
+                                </p>
+                              )}
+
+                              {certificate.link && (
+                                <a
+                                  href={certificate.link}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="mt-2 inline-flex text-xs text-blue-400 transition-colors hover:text-blue-300"
+                                >
+                                  View credential →
+                                </a>
+                              )}
+                            </div>
+
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </GlassCard>
+
+              </div>
+
             </div>
           </TabsContent>
         </Tabs>
